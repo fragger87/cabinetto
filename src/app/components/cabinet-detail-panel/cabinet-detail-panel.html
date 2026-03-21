@@ -1,0 +1,99 @@
+<div
+  class="detail-panel-overlay"
+  (click)="onClose()"
+  (keydown.escape)="onClose()"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+  <div class="detail-panel" (click)="$event.stopPropagation()">
+    <div class="panel-header">
+      <h3>{{ cabinet().name }}</h3>
+      <span class="dims">{{ cabinet().width }} mm wide &middot; Qty: {{ cabinet().quantity }}</span>
+      <button type="button" class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+
+    <!-- 18mm Carcass Parts -->
+    <h4>Carcass Parts (18 mm)</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Width</th>
+          <th>Height</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of bom().pieces18mm; track $index) {
+          <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.width }} mm</td>
+            <td>{{ p.height }} mm</td>
+            <td>{{ p.quantity }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- 15mm Drawer Parts -->
+    @if (bom().pieces15mm.length > 0) {
+      <h4>Drawer Parts (15 mm)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of bom().pieces15mm; track $index) {
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ p.width }} mm</td>
+              <td>{{ p.height }} mm</td>
+              <td>{{ p.quantity }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="drawer-info">
+        <strong>Layout:</strong> {{ cabinet().drawers?.layout }} &middot; <strong>Count:</strong>
+        {{ cabinet().drawers?.count }}
+      </div>
+    }
+
+    <!-- HDF Parts -->
+    @if (bom().piecesHdf.length > 0) {
+      <h4>HDF Parts (3 mm)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of bom().piecesHdf; track $index) {
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ p.width }} mm</td>
+              <td>{{ p.height }} mm</td>
+              <td>{{ p.quantity }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+    <!-- Summary -->
+    <div class="panel-summary">
+      <span>Edge banding: {{ bom().edgeBandingMm | number: '1.0-0' }} mm</span>
+    </div>
+  </div>
+</div>

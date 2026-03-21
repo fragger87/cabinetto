@@ -1,0 +1,23 @@
+<header>
+  <h1>Cabinet Calculator</h1>
+  <app-project-toolbar />
+</header>
+
+<main>
+  <section class="input-panel">
+    <app-board-spec-form />
+    <app-global-settings-form />
+    <app-cabinet-list />
+
+    <div class="actions">
+      <button type="button" class="calculate-btn" (click)="calculate()">Calculate</button>
+      @if (error()) {
+        <span class="error">{{ error() }}</span>
+      }
+    </div>
+  </section>
+
+  @if (result() && bom()) {
+    <app-report-page [result]="result()!" [bom]="bom()!" />
+  }
+</main>

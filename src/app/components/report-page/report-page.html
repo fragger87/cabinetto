@@ -1,0 +1,160 @@
+<div class="report no-print-hide">
+  <div class="report-header">
+    <h2>Cutting Report</h2>
+    <button type="button" class="print-btn no-print" (click)="print()">Print / PDF</button>
+  </div>
+
+  <!-- Project Parameters -->
+  <section class="params-summary">
+    <h3>Project Parameters</h3>
+    <table class="params-table">
+      <tbody>
+        <tr>
+          <td>Board</td>
+          <td>
+            {{ result().carcassLayouts[0]?.boardWidth }} ×
+            {{ result().carcassLayouts[0]?.boardHeight }} mm
+          </td>
+        </tr>
+        <tr>
+          <td>Optimized depth</td>
+          <td>{{ result().depth }} mm</td>
+        </tr>
+        <tr>
+          <td>Shared leg height</td>
+          <td>{{ result().legHeight }} mm</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Order Summary -->
+  <section class="order-summary">
+    <h3>Order Summary</h3>
+    <div class="summary-cards">
+      <div class="card">
+        <div class="card-value">{{ bom().totalBoards18mm }}</div>
+        <div class="card-label">18mm Boards</div>
+      </div>
+      @if (bom().totalBoards15mm > 0) {
+        <div class="card">
+          <div class="card-value">{{ bom().totalBoards15mm }}</div>
+          <div class="card-label">15mm Boards</div>
+        </div>
+      }
+      <div class="card">
+        <div class="card-value">{{ bom().hdfBoardCount }}</div>
+        <div class="card-label">HDF Boards</div>
+      </div>
+      <div class="card">
+        <div class="card-value">{{ bom().hardware.legSets }}</div>
+        <div class="card-label">Leg Sets</div>
+      </div>
+      @if (bom().hardware.slidePairs > 0) {
+        <div class="card">
+          <div class="card-value">{{ bom().hardware.slidePairs }}</div>
+          <div class="card-label">Slide Pairs</div>
+        </div>
+      }
+      <div class="card">
+        <div class="card-value">{{ bom().edgeBanding.totalMeters | number: '1.1-1' }} m</div>
+        <div class="card-label">Edge Banding</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cabinet table -->
+  <section class="cabinet-table">
+    <h3>Cabinets</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Width</th>
+          <th>Body Height</th>
+          <th>Leg Height</th>
+          <th>Drawers</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cab of result().cabinets; track $index) {
+          <tr>
+            <td>{{ cab.name }}</td>
+            <td>{{ cab.width }} mm</td>
+            <td>{{ cab.bodyHeight }} mm</td>
+            <td>{{ cab.legHeight }} mm</td>
+            <td>{{ cab.drawers?.count ?? 0 }}</td>
+            <td>{{ cab.quantity }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Cabinet Overview (simple blocks) -->
+  <app-cabinet-visualization [cabinets]="result().cabinets" [depth]="result().depth" />
+
+  <!-- Detailed Cabinet Views (click any cabinet for detail panel) -->
+  <section class="cabinet-details">
+    <h3>Cabinet Drawings</h3>
+    <p class="hint no-print">Click a cabinet for full specification.</p>
+    <div class="cabinet-drawings-grid">
+      @for (cab of result().cabinets; track $index) {
+        <div class="cabinet-drawing-pair">
+          <app-cabinet-front-view
+            [cabinet]="cab"
+            [depth]="result().depth"
+            [board]="
+              result().carcassLayouts[0]
+                ? {
+                    width: result().carcassLayouts[0].boardWidth,
+                    height: result().carcassLayouts[0].boardHeight,
+                    thickness: 18,
+                    kerf: 4,
+                  }
+                : { width: 2800, height: 2070, thickness: 18, kerf: 4 }
+            "
+            (cabinetClick)="onCabinetClick($event)"
+          />
+          <app-cabinet-side-view
+            [cabinet]="cab"
+            [depth]="result().depth"
+            [board]="{ width: 2800, height: 2070, thickness: 18, kerf: 4 }"
+          />
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Detail Panel (overlay, shown on click) -->
+  @if (selectedCabinet() && selectedBom()) {
+    <app-cabinet-detail-panel
+      [cabinet]="selectedCabinet()!"
+      [bom]="selectedBom()!"
+      (panelClose)="closeDetail()"
+    />
+  }
+
+  <!-- Parts Lists -->
+  <app-parts-list
+    [pieces18mm]="bom().allPieces18mm"
+    [pieces15mm]="bom().allPieces15mm"
+    [piecesHdf]="bom().allPiecesHdf"
+    [edgeBanding]="bom().edgeBanding"
+  />
+
+  <!-- Cutting Layouts -->
+  <app-cutting-layout [layouts]="result().carcassLayouts" label="Cutting Layout — 18 mm Boards" />
+
+  @if (result().drawerLayouts.length > 0) {
+    <app-cutting-layout
+      [layouts]="result().drawerLayouts"
+      label="Cutting Layout — 15 mm Drawer Boards"
+    />
+  }
+
+  @if (result().hdfLayouts.length > 0) {
+    <app-cutting-layout [layouts]="result().hdfLayouts" label="Cutting Layout — HDF 3 mm Boards" />
+  }
+</div>

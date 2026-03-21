@@ -1,0 +1,56 @@
+<section class="cutting-layout">
+  <h3>{{ label() }}</h3>
+
+  @for (layout of layouts(); track layout.boardIndex) {
+    <div class="board-container">
+      <h4>
+        Board {{ layout.boardIndex + 1 }} — Utilization: {{ layout.utilization | number: '1.1-1' }}%
+      </h4>
+      <svg [attr.width]="svgWidth(layout)" [attr.height]="svgHeight(layout)" class="board-svg">
+        <rect
+          x="0"
+          y="0"
+          [attr.width]="svgWidth(layout)"
+          [attr.height]="svgHeight(layout)"
+          fill="#f5f0e8"
+          stroke="#8B4513"
+          stroke-width="1"
+        />
+
+        @for (piece of layout.placedPieces; track $index) {
+          <g class="piece">
+            <rect
+              [attr.x]="piece.x * scale"
+              [attr.y]="piece.y * scale"
+              [attr.width]="piece.width * scale"
+              [attr.height]="piece.height * scale"
+              [attr.fill]="pieceColor(piece)"
+              stroke="#333"
+              stroke-width="0.5"
+            >
+              <title>{{ pieceTooltip(piece) }}</title>
+            </rect>
+
+            @if (showLabel(piece)) {
+              <text
+                [attr.x]="labelX(piece)"
+                [attr.y]="labelY(piece)"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="9"
+                fill="#fff"
+                pointer-events="none"
+              >
+                {{ labelText(piece) }}
+              </text>
+            }
+          </g>
+        }
+      </svg>
+    </div>
+  }
+
+  @if (layouts().length === 0) {
+    <p>No boards to display.</p>
+  }
+</section>

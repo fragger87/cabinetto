@@ -1,0 +1,205 @@
+@let l = layout();
+<div
+  class="cabinet-front-view"
+  (click)="onClick()"
+  role="button"
+  tabindex="0"
+  (keydown.enter)="onClick()"
+>
+  <div class="cabinet-title">{{ cabinet().name }} (x{{ cabinet().quantity }})</div>
+
+  <svg [attr.width]="l.svgWidth" [attr.height]="l.svgHeight" class="front-svg">
+    <g [attr.transform]="'translate(' + margin + ',' + margin + ')'">
+      <!-- Side panels (brown) -->
+      <rect
+        x="0"
+        y="0"
+        [attr.width]="l.thickness * s"
+        [attr.height]="l.bodyH * s"
+        fill="rgba(139,69,19,0.7)"
+        stroke="#333"
+        stroke-width="0.5"
+      />
+      <rect
+        [attr.x]="(l.outerW - l.thickness) * s"
+        y="0"
+        [attr.width]="l.thickness * s"
+        [attr.height]="l.bodyH * s"
+        fill="rgba(139,69,19,0.7)"
+        stroke="#333"
+        stroke-width="0.5"
+      />
+
+      <!-- Top rail (blue) — only front rail visible from front view -->
+      <rect
+        [attr.x]="l.thickness * s"
+        y="0"
+        [attr.width]="l.innerW * s"
+        [attr.height]="l.thickness * s"
+        fill="rgba(70,130,180,0.7)"
+        stroke="#333"
+        stroke-width="0.5"
+      />
+
+      <!-- Bottom panel (green) -->
+      <rect
+        [attr.x]="l.thickness * s"
+        [attr.y]="(l.bodyH - l.thickness) * s"
+        [attr.width]="l.innerW * s"
+        [attr.height]="l.thickness * s"
+        fill="rgba(34,139,34,0.6)"
+        stroke="#333"
+        stroke-width="0.5"
+      />
+
+      <!-- Back panel outline (dashed gray) -->
+      <rect
+        [attr.x]="l.thickness * s"
+        [attr.y]="l.railWidth * s"
+        [attr.width]="l.innerW * s"
+        [attr.height]="(l.bodyH - l.railWidth - l.thickness) * s"
+        fill="none"
+        stroke="#999"
+        stroke-width="0.5"
+        stroke-dasharray="4,3"
+      />
+
+      <!-- Drawer boxes (orange) -->
+      @for (d of l.drawers; track $index) {
+        <rect
+          [attr.x]="(l.thickness + 4) * s"
+          [attr.y]="d.y * s"
+          [attr.width]="(l.innerW - 8) * s"
+          [attr.height]="d.height * s"
+          fill="rgba(255,140,0,0.3)"
+          stroke="#e67e00"
+          stroke-width="0.8"
+        />
+        <!-- Drawer height label -->
+        <text
+          [attr.x]="(l.outerW / 2) * s"
+          [attr.y]="(d.y + d.height / 2) * s"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          font-size="9"
+          fill="#b35900"
+        >
+          {{ d.label }}
+        </text>
+      }
+
+      <!-- Legs (dashed outline) -->
+      @if (l.legH > 0) {
+        <rect
+          x="0"
+          [attr.y]="l.bodyH * s"
+          [attr.width]="l.outerW * s"
+          [attr.height]="l.legH * s"
+          fill="none"
+          stroke="#666"
+          stroke-width="1"
+          stroke-dasharray="5,3"
+        />
+      }
+
+      <!-- DIMENSION LINES -->
+
+      <!-- Outer width (top) -->
+      <line
+        x1="0"
+        [attr.y1]="-12"
+        [attr.x1]="0"
+        y1="-12"
+        [attr.x2]="l.outerW * s"
+        y2="-12"
+        stroke="#555"
+        stroke-width="0.8"
+        marker-start="url(#arrowL)"
+        marker-end="url(#arrowR)"
+      />
+      <text [attr.x]="(l.outerW / 2) * s" y="-16" text-anchor="middle" font-size="10" fill="#333">
+        {{ l.outerW }}
+      </text>
+
+      <!-- Body height (right) -->
+      <line
+        [attr.x1]="l.outerW * s + 12"
+        y1="0"
+        [attr.x2]="l.outerW * s + 12"
+        [attr.y2]="l.bodyH * s"
+        stroke="#555"
+        stroke-width="0.8"
+        marker-start="url(#arrowU)"
+        marker-end="url(#arrowD)"
+      />
+      <text
+        [attr.x]="l.outerW * s + 16"
+        [attr.y]="(l.bodyH / 2) * s"
+        dominant-baseline="middle"
+        font-size="10"
+        fill="#333"
+      >
+        {{ l.bodyH }}
+      </text>
+
+      <!-- Leg height (right, below body) -->
+      @if (l.legH > 0) {
+        <line
+          [attr.x1]="l.outerW * s + 12"
+          [attr.y1]="l.bodyH * s"
+          [attr.x2]="l.outerW * s + 12"
+          [attr.y2]="l.totalH * s"
+          stroke="#555"
+          stroke-width="0.8"
+          marker-start="url(#arrowU)"
+          marker-end="url(#arrowD)"
+        />
+        <text
+          [attr.x]="l.outerW * s + 16"
+          [attr.y]="(l.bodyH + l.legH / 2) * s"
+          dominant-baseline="middle"
+          font-size="10"
+          fill="#888"
+        >
+          {{ l.legH }}
+        </text>
+      }
+
+      <!-- Inner width (bottom inside) -->
+      <line
+        [attr.x1]="l.thickness * s"
+        [attr.y1]="(l.bodyH + 4) * s"
+        [attr.x2]="(l.outerW - l.thickness) * s"
+        [attr.y2]="(l.bodyH + 4) * s"
+        stroke="#999"
+        stroke-width="0.5"
+        stroke-dasharray="2,2"
+      />
+      <text
+        [attr.x]="(l.outerW / 2) * s"
+        [attr.y]="(l.bodyH + 12) * s"
+        text-anchor="middle"
+        font-size="8"
+        fill="#888"
+      >
+        inner {{ l.innerW }}
+      </text>
+    </g>
+
+    <!-- Arrow markers -->
+    <defs>
+      <marker id="arrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#555" />
+      </marker>
+      <marker id="arrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
+        <path d="M6,0 L0,3 L6,6 Z" fill="#555" />
+      </marker>
+      <marker id="arrowD" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto">
+        <path d="M0,0 L3,6 L6,0 Z" fill="#555" />
+      </marker>
+      <marker id="arrowU" markerWidth="6" markerHeight="6" refX="3" refY="1" orient="auto">
+        <path d="M0,6 L3,0 L6,6 Z" fill="#555" />
+      </marker>
+    </defs>
+  </svg>
+</div>

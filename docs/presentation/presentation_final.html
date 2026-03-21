@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cabinet Calculator — Project Presentation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#1a1a2e;color:#eee;overflow:hidden}
+.deck{width:100vw;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px;opacity:0;transition:opacity .4s;pointer-events:none}
+.slide.active{opacity:1;pointer-events:auto}
+h1{font-size:3rem;color:#b8860b;margin-bottom:20px}
+h2{font-size:2rem;color:#d4a843;margin-bottom:24px}
+p,.desc{font-size:1.2rem;max-width:800px;text-align:center;line-height:1.7;color:#ccc}
+table{border-collapse:collapse;margin:20px auto;font-size:1rem}
+th,td{padding:10px 20px;border:1px solid #444;text-align:left}
+th{background:#2a2a4a;color:#b8860b}
+td{background:#1e1e3a}
+.flow{font-family:monospace;font-size:1.1rem;background:#1e1e3a;padding:20px 30px;border-radius:8px;border:1px solid #444;margin:16px 0;color:#8BD;white-space:pre;text-align:left}
+.stats{display:flex;gap:30px;margin:24px 0}
+.stat{background:#2a2a4a;border:1px solid #b8860b;border-radius:12px;padding:20px 30px;text-align:center}
+.stat .val{font-size:2.5rem;font-weight:700;color:#b8860b}
+.stat .lbl{font-size:.9rem;color:#999;margin-top:4px}
+.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.nav .dot{width:12px;height:12px;border-radius:50%;background:#444;cursor:pointer;transition:background .2s}
+.nav .dot.active{background:#b8860b}
+.tag{display:inline-block;background:#2a2a4a;border:1px solid #b8860b;border-radius:4px;padding:2px 10px;margin:3px;font-size:.9rem;color:#d4a843}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<div class="slide active">
+<h1>Cabinet Calculator</h1>
+<p>Kitchen cabinet carcass calculator with drawer support</p>
+<p class="desc">Angular SPA &middot; Guillotine bin packing &middot; Two-stage parametric optimization</p>
+</div>
+
+<div class="slide">
+<h2>Problem</h2>
+<p>Designing European frameless kitchen cabinets requires computing optimal board cutting layouts that minimize sheet material waste.</p>
+<p style="margin-top:16px">Manual layout planning is time-consuming and suboptimal. Small changes in leg height or cabinet depth can save entire boards.</p>
+</div>
+
+<div class="slide">
+<h2>Solution</h2>
+<div class="flow">User Input → ProjectConfig
+  → Stage 1: Leg Height Sweep (5mm steps)
+  → Stage 2: Depth Sweep (5mm steps)
+  → Guillotine Bin Packing (BSSF)
+  → Visual Report + BOM</div>
+<p>Two-stage parametric optimization finds the combination that uses the fewest boards with highest utilization.</p>
+</div>
+
+<div class="slide">
+<h2>Tech Stack</h2>
+<div>
+<span class="tag">Angular 21</span>
+<span class="tag">TypeScript 5.9</span>
+<span class="tag">Vitest</span>
+<span class="tag">ESLint + Prettier</span>
+<span class="tag">GitHub Actions</span>
+</div>
+<p style="margin-top:20px">No backend. No runtime dependencies beyond Angular core.<br/>All computation in pure TypeScript services.</p>
+</div>
+
+<div class="slide">
+<h2>Architecture</h2>
+<table>
+<tr><th>Layer</th><th>Components</th></tr>
+<tr><td>Input</td><td>Board spec, cabinet list, drawer config, polymorphic fields</td></tr>
+<tr><td>State</td><td>Signal-based ProjectStateService</td></tr>
+<tr><td>Compute</td><td>CuttingOptimizer, LegOptimizer, DepthOptimizer, BOM</td></tr>
+<tr><td>Report</td><td>SVG cutting layouts, parts tables, cabinet viz, print</td></tr>
+<tr><td>Persistence</td><td>localStorage + JSON import/export</td></tr>
+</table>
+</div>
+
+<div class="slide">
+<h2>Key Feature: Drawer Support</h2>
+<table>
+<tr><th>Scheme</th><th>Description</th></tr>
+<tr><td>Equal</td><td>All drawers same height</td></tr>
+<tr><td>Graduated</td><td>Top shorter, bottom taller (1:1.5:2)</td></tr>
+<tr><td>Custom</td><td>User-specified heights per drawer</td></tr>
+</table>
+<p style="margin-top:16px">15mm drawer boards optimized in a separate pass from 18mm carcass boards.</p>
+</div>
+
+<div class="slide">
+<h2>Project Status</h2>
+<div class="stats">
+<div class="stat"><div class="val">5</div><div class="lbl">Epics</div></div>
+<div class="stat"><div class="val">25</div><div class="lbl">Stories</div></div>
+<div class="stat"><div class="val">29</div><div class="lbl">Tests</div></div>
+<div class="stat"><div class="val">310 KB</div><div class="lbl">Bundle</div></div>
+</div>
+<p>All 5 Epics implemented. Build, lint, and tests passing.</p>
+</div>
+
+<div class="slide">
+<h2>Next Steps</h2>
+<table>
+<tr><th>#</th><th>Action</th></tr>
+<tr><td>1</td><td>User testing with real kitchen projects</td></tr>
+<tr><td>2</td><td>Deploy to static hosting (GitHub Pages / Netlify)</td></tr>
+<tr><td>3</td><td>Wall cabinet and tall cabinet support</td></tr>
+<tr><td>4</td><td>Grain direction constraints for visible surfaces</td></tr>
+</table>
+</div>
+
+</div>
+
+<div class="nav" id="nav"></div>
+
+<script>
+const slides=document.querySelectorAll('.slide'),nav=document.getElementById('nav');
+let cur=0;
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>go(i);nav.appendChild(d)});
+function go(n){slides[cur].classList.remove('active');nav.children[cur].classList.remove('active');cur=Math.max(0,Math.min(n,slides.length-1));slides[cur].classList.add('active');nav.children[cur].classList.add('active')}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+</script>
+</body>
+</html>

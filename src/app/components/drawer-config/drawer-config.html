@@ -1,0 +1,92 @@
+<div class="drawer-config">
+  <label class="toggle">
+    <input type="checkbox" [checked]="enabled" (change)="toggleEnabled()" />
+    Has drawers
+  </label>
+
+  @if (enabled) {
+    <div class="drawer-fields">
+      <div class="form-row">
+        <label for="drawerCount">Drawer count</label>
+        <input
+          id="drawerCount"
+          type="number"
+          [(ngModel)]="count"
+          (ngModelChange)="onCountChange()"
+          min="1"
+          max="10"
+        />
+      </div>
+
+      <div class="form-row">
+        <label for="drawerLayout">Layout</label>
+        <select id="drawerLayout" [(ngModel)]="layout" (ngModelChange)="onLayoutChange()">
+          @for (l of layouts; track l) {
+            <option [value]="l">{{ l }}</option>
+          }
+        </select>
+      </div>
+
+      @if (layout === 'custom') {
+        <div class="custom-heights">
+          @for (h of customHeights; track $index; let i = $index) {
+            <div class="form-row">
+              <label [for]="'drawerHeight' + i">Drawer {{ i + 1 }} height (mm)</label>
+              <input
+                [id]="'drawerHeight' + i"
+                type="number"
+                [ngModel]="customHeights[i]"
+                (ngModelChange)="customHeights[i] = $event; emit()"
+                min="60"
+              />
+            </div>
+          }
+        </div>
+      }
+
+      <details>
+        <summary>Advanced settings</summary>
+        <div class="form-row">
+          <label for="slideClearance">Slide clearance per side (mm)</label>
+          <input
+            id="slideClearance"
+            type="number"
+            [(ngModel)]="slideClearance"
+            (ngModelChange)="emit()"
+            min="0"
+          />
+        </div>
+        <div class="form-row">
+          <label for="frontGap">Front gap (mm)</label>
+          <input
+            id="frontGap"
+            type="number"
+            [(ngModel)]="frontGap"
+            (ngModelChange)="emit()"
+            min="0"
+          />
+        </div>
+        <div class="form-row">
+          <label for="drawerGap">Drawer gap (mm)</label>
+          <input
+            id="drawerGap"
+            type="number"
+            [(ngModel)]="drawerGap"
+            (ngModelChange)="emit()"
+            min="0"
+          />
+        </div>
+        <div class="form-row">
+          <label for="matThickness">Drawer material thickness (mm)</label>
+          <input
+            id="matThickness"
+            type="number"
+            [(ngModel)]="drawerMaterialThickness"
+            (ngModelChange)="emit()"
+            min="1"
+          />
+        </div>
+      </details>
+    </div>
+  }
+</div>

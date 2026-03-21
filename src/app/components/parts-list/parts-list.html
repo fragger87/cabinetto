@@ -1,0 +1,104 @@
+<section class="parts-list">
+  <h3>Parts List — 18 mm Particleboard</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>Width (mm)</th>
+        <th>Height (mm)</th>
+        <th>Qty</th>
+        <th>Cabinet</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of pieces18mm(); track $index) {
+        <tr>
+          <td>{{ p.name }}</td>
+          <td>{{ p.width }}</td>
+          <td>{{ p.height }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>{{ p.sourceCabinet }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (pieces15mm().length > 0) {
+    <h3>Parts List — 15 mm Drawer Boxes</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Width (mm)</th>
+          <th>Height (mm)</th>
+          <th>Qty</th>
+          <th>Cabinet</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of pieces15mm(); track $index) {
+          <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.width }}</td>
+            <td>{{ p.height }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.sourceCabinet }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <h3>Parts List — HDF 3 mm</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>Width (mm)</th>
+        <th>Height (mm)</th>
+        <th>Qty</th>
+        <th>Cabinet</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of piecesHdf(); track $index) {
+        <tr>
+          <td>{{ p.name }}</td>
+          <td>{{ p.width }}</td>
+          <td>{{ p.height }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>{{ p.sourceCabinet }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <h3>Edge Banding</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Cabinet</th>
+        <th>Length (mm)</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of edgeBanding().entries; track $index) {
+        <tr>
+          <td>{{ e.cabinetName }}</td>
+          <td>{{ e.lengthMm }}</td>
+        </tr>
+      }
+      <tr class="total-row">
+        <td><strong>Total (+10%)</strong></td>
+        <td>
+          <strong
+            >{{ edgeBanding().totalMm }} mm ({{
+              edgeBanding().totalMeters | number: '1.1-1'
+            }}
+            m)</strong
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

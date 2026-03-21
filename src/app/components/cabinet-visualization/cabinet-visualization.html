@@ -1,0 +1,61 @@
+<section class="cabinet-visualization">
+  <h3>Cabinet Overview</h3>
+  <div class="cabinets-row">
+    @for (cab of cabinets(); track $index) {
+      <div class="cabinet-block">
+        <svg [attr.width]="blockWidth(cab) + 2" [attr.height]="blockHeight(cab) + 2">
+          <!-- Body -->
+          <rect
+            x="1"
+            y="1"
+            [attr.width]="blockWidth(cab)"
+            [attr.height]="bodyHeight(cab)"
+            fill="#d2b48c"
+            stroke="#8B4513"
+            stroke-width="1"
+          />
+
+          <!-- Drawer dividers -->
+          @for (lineY of drawerLines(cab); track $index) {
+            <line
+              x1="1"
+              [attr.y1]="lineY + 1"
+              [attr.x2]="blockWidth(cab) + 1"
+              [attr.y2]="lineY + 1"
+              stroke="#8B4513"
+              stroke-width="0.5"
+              stroke-dasharray="3,2"
+            />
+          }
+
+          <!-- Legs -->
+          @if (cab.legHeight > 0) {
+            <rect
+              x="1"
+              [attr.y]="bodyHeight(cab) + 1"
+              [attr.width]="blockWidth(cab)"
+              [attr.height]="legHeight(cab)"
+              fill="none"
+              stroke="#666"
+              stroke-width="1"
+              stroke-dasharray="4,2"
+            />
+          }
+        </svg>
+        <div class="cabinet-label">
+          <strong>{{ cab.name }}</strong
+          ><br />
+          {{ cab.width }} × {{ depth() }} mm<br />
+          Body: {{ cab.bodyHeight }} mm
+          @if (cab.legHeight > 0) {
+            <br />Legs: {{ cab.legHeight }} mm
+          }
+          @if (cab.drawers) {
+            <br />Drawers: {{ cab.drawers.count }}
+          }
+          <br />Qty: {{ cab.quantity }}
+        </div>
+      </div>
+    }
+  </div>
+</section>

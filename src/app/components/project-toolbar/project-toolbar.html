@@ -1,0 +1,15 @@
+<div class="project-toolbar">
+  <button type="button" (click)="save()">Save</button>
+  <button type="button" (click)="load()">Load</button>
+  <button type="button" (click)="exportJson()">Export JSON</button>
+  <button type="button" (click)="triggerImport()">Import JSON</button>
+
+  <input #fileInput type="file" accept=".json" (change)="onFileSelected($event)" hidden />
+
+  @if (error()) {
+    <span class="toolbar-error">{{ error() }}</span>
+  }
+  @if (success()) {
+    <span class="toolbar-success">{{ success() }}</span>
+  }
+</div>

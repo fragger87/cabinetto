@@ -1,0 +1,26 @@
+<fieldset class="polymorphic-field">
+  <legend>{{ label() }} (mm)</legend>
+
+  <label class="toggle">
+    <input type="checkbox" [checked]="isRangeMode" (change)="toggleMode()" />
+    Optimize (range)
+  </label>
+
+  @if (isRangeMode) {
+    <div class="range-inputs">
+      <label>
+        Min
+        <input type="number" [(ngModel)]="minValue" (ngModelChange)="emit()" min="0" />
+      </label>
+      <label>
+        Max
+        <input type="number" [(ngModel)]="maxValue" (ngModelChange)="emit()" min="0" />
+      </label>
+    </div>
+  } @else {
+    <label>
+      Fixed
+      <input type="number" [(ngModel)]="fixedValue" (ngModelChange)="emit()" min="0" />
+    </label>
+  }
+</fieldset>

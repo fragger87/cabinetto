@@ -1,0 +1,165 @@
+@let l = layout();
+<div class="cabinet-side-view">
+  <div class="view-title">Side View — {{ cabinet().name }}</div>
+
+  <svg [attr.width]="l.svgWidth" [attr.height]="l.svgHeight" class="side-svg">
+    <g [attr.transform]="'translate(' + margin + ',' + margin + ')'">
+      <!-- Side panel (brown, full body) -->
+      <rect
+        x="0"
+        y="0"
+        [attr.width]="l.depth * s"
+        [attr.height]="l.bodyH * s"
+        fill="rgba(139,69,19,0.15)"
+        stroke="#8B4513"
+        stroke-width="1"
+      />
+
+      <!-- Front top rail (blue) -->
+      <rect
+        x="0"
+        y="0"
+        [attr.width]="l.railWidth * s"
+        [attr.height]="l.thickness * s"
+        fill="rgba(70,130,180,0.4)"
+        stroke="#4169E1"
+        stroke-width="0.5"
+      />
+
+      <!-- Back top rail (blue) -->
+      <rect
+        [attr.x]="(l.depth - l.railWidth) * s"
+        y="0"
+        [attr.width]="l.railWidth * s"
+        [attr.height]="l.thickness * s"
+        fill="rgba(70,130,180,0.4)"
+        stroke="#4169E1"
+        stroke-width="0.5"
+      />
+
+      <!-- Back panel HDF (gray, at rear) -->
+      <rect
+        [attr.x]="(l.depth - l.hdfThickness) * s"
+        y="0"
+        [attr.width]="l.hdfThickness * s"
+        [attr.height]="(l.bodyH - l.thickness) * s"
+        fill="rgba(150,150,150,0.5)"
+        stroke="#666"
+        stroke-width="0.5"
+      />
+
+      <!-- Bottom panel (green) -->
+      <rect
+        x="0"
+        [attr.y]="(l.bodyH - l.thickness) * s"
+        [attr.width]="l.bottomDepth * s"
+        [attr.height]="l.thickness * s"
+        fill="rgba(34,139,34,0.6)"
+        stroke="#333"
+        stroke-width="0.5"
+      />
+
+      <!-- Drawer zone (orange dashed, if has drawers) -->
+      @if (l.hasDrawers) {
+        <rect
+          [attr.x]="l.frontGap * s"
+          [attr.y]="l.railWidth * s"
+          [attr.width]="l.drawerDepth * s"
+          [attr.height]="(l.bodyH - l.railWidth - l.thickness) * s"
+          fill="rgba(255,140,0,0.1)"
+          stroke="#e67e00"
+          stroke-width="0.8"
+          stroke-dasharray="4,3"
+        />
+      }
+
+      <!-- Legs (dashed) -->
+      @if (l.legH > 0) {
+        <rect
+          x="0"
+          [attr.y]="l.bodyH * s"
+          [attr.width]="l.depth * s"
+          [attr.height]="l.legH * s"
+          fill="none"
+          stroke="#666"
+          stroke-width="1"
+          stroke-dasharray="5,3"
+        />
+      }
+
+      <!-- DIMENSIONS -->
+
+      <!-- Depth (top) -->
+      <line x1="0" y1="-12" [attr.x2]="l.depth * s" y2="-12" stroke="#555" stroke-width="0.8" />
+      <text [attr.x]="(l.depth / 2) * s" y="-16" text-anchor="middle" font-size="10" fill="#333">
+        depth {{ l.depth }}
+      </text>
+
+      <!-- Body height (left) -->
+      <line x1="-12" y1="0" x2="-12" [attr.y2]="l.bodyH * s" stroke="#555" stroke-width="0.8" />
+      <text
+        x="-16"
+        [attr.y]="(l.bodyH / 2) * s"
+        text-anchor="end"
+        dominant-baseline="middle"
+        font-size="10"
+        fill="#333"
+      >
+        {{ l.bodyH }}
+      </text>
+
+      <!-- Front gap (bottom, if drawers) -->
+      @if (l.hasDrawers && l.frontGap > 0) {
+        <line
+          x1="0"
+          [attr.y1]="(l.bodyH + 8) * s"
+          [attr.x2]="l.frontGap * s"
+          [attr.y2]="(l.bodyH + 8) * s"
+          stroke="#e67e00"
+          stroke-width="0.5"
+        />
+        <text
+          [attr.x]="(l.frontGap / 2) * s"
+          [attr.y]="(l.bodyH + 16) * s"
+          text-anchor="middle"
+          font-size="8"
+          fill="#e67e00"
+        >
+          gap {{ l.frontGap }}
+        </text>
+      }
+
+      <!-- Slide clearance annotation (if drawers) -->
+      @if (l.hasDrawers && l.slideClearance > 0) {
+        <text
+          [attr.x]="(l.depth / 2) * s"
+          [attr.y]="(l.bodyH - l.thickness - 6) * s"
+          text-anchor="middle"
+          font-size="8"
+          fill="#888"
+        >
+          slide clearance {{ l.slideClearance }}/side
+        </text>
+      }
+
+      <!-- Bottom mode label -->
+      <text x="4" [attr.y]="(l.bodyH - 4) * s" font-size="7" fill="#228B22">
+        {{ l.bottomDepth === l.depth ? 'full' : 'recessed' }}
+      </text>
+
+      <!-- Leg height (left) -->
+      @if (l.legH > 0) {
+        <text
+          x="-16"
+          [attr.y]="(l.bodyH + l.legH / 2) * s"
+          text-anchor="end"
+          dominant-baseline="middle"
+          font-size="9"
+          fill="#888"
+        >
+          legs {{ l.legH }}
+        </text>
+      }
+    </g>
+  </svg>
+</div>
