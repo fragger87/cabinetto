@@ -1,11 +1,12 @@
 import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { CutPiece, EdgeBandingResult } from '../../models';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-parts-list',
   standalone: true,
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, TranslatePipe],
   templateUrl: './parts-list.html',
 })
 export class PartsList {

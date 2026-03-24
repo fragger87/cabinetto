@@ -1,0 +1,60 @@
+<fieldset>
+  <legend>{{ 'materials.title' | tr }}</legend>
+  <table class="material-table">
+    <thead>
+      <tr>
+        <th>{{ 'materials.name' | tr }}</th>
+        <th>{{ 'materials.width' | tr }}</th>
+        <th>{{ 'materials.height' | tr }}</th>
+        <th>{{ 'materials.thickness' | tr }}</th>
+        <th>{{ 'materials.edgeBanding' | tr }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (mat of materials; track trackByIndex($index)) {
+        <tr>
+          <td><input type="text" [(ngModel)]="mat.name" (ngModelChange)="onFieldChange()" /></td>
+          <td>
+            <input
+              type="number"
+              [(ngModel)]="mat.width"
+              (ngModelChange)="onFieldChange()"
+              min="1"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [(ngModel)]="mat.height"
+              (ngModelChange)="onFieldChange()"
+              min="1"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [(ngModel)]="mat.thickness"
+              (ngModelChange)="onFieldChange()"
+              min="1"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              [(ngModel)]="mat.edgeBanding"
+              (ngModelChange)="onFieldChange()"
+              placeholder="e.g. PCV_1"
+            />
+          </td>
+          <td>
+            <button type="button" class="remove-btn" (click)="removeMaterial($index)">
+              {{ 'materials.remove' | tr }}
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <button type="button" class="add-btn" (click)="addMaterial()">{{ 'materials.add' | tr }}</button>
+</fieldset>

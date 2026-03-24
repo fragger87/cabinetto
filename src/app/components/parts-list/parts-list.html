@@ -1,13 +1,13 @@
 <section class="parts-list">
-  <h3>Parts List — 18 mm Particleboard</h3>
+  <h3>{{ 'parts.18mm' | tr }}</h3>
   <table>
     <thead>
       <tr>
-        <th>Element</th>
-        <th>Width (mm)</th>
-        <th>Height (mm)</th>
-        <th>Qty</th>
-        <th>Cabinet</th>
+        <th>{{ 'parts.element' | tr }}</th>
+        <th>{{ 'parts.widthMm' | tr }}</th>
+        <th>{{ 'parts.heightMm' | tr }}</th>
+        <th>{{ 'parts.qty' | tr }}</th>
+        <th>{{ 'parts.cabinet' | tr }}</th>
       </tr>
     </thead>
     <tbody>
@@ -24,15 +24,15 @@
   </table>
 
   @if (pieces15mm().length > 0) {
-    <h3>Parts List — 15 mm Drawer Boxes</h3>
+    <h3>{{ 'parts.15mm' | tr }}</h3>
     <table>
       <thead>
         <tr>
-          <th>Element</th>
-          <th>Width (mm)</th>
-          <th>Height (mm)</th>
-          <th>Qty</th>
-          <th>Cabinet</th>
+          <th>{{ 'parts.element' | tr }}</th>
+          <th>{{ 'parts.widthMm' | tr }}</th>
+          <th>{{ 'parts.heightMm' | tr }}</th>
+          <th>{{ 'parts.qty' | tr }}</th>
+          <th>{{ 'parts.cabinet' | tr }}</th>
         </tr>
       </thead>
       <tbody>
@@ -49,15 +49,15 @@
     </table>
   }
 
-  <h3>Parts List — HDF 3 mm</h3>
+  <h3>{{ 'parts.hdf' | tr }}</h3>
   <table>
     <thead>
       <tr>
-        <th>Element</th>
-        <th>Width (mm)</th>
-        <th>Height (mm)</th>
-        <th>Qty</th>
-        <th>Cabinet</th>
+        <th>{{ 'parts.element' | tr }}</th>
+        <th>{{ 'parts.widthMm' | tr }}</th>
+        <th>{{ 'parts.heightMm' | tr }}</th>
+        <th>{{ 'parts.qty' | tr }}</th>
+        <th>{{ 'parts.cabinet' | tr }}</th>
       </tr>
     </thead>
     <tbody>
@@ -73,12 +73,12 @@
     </tbody>
   </table>
 
-  <h3>Edge Banding</h3>
+  <h3>{{ 'parts.edgeBanding' | tr }}</h3>
   <table>
     <thead>
       <tr>
-        <th>Cabinet</th>
-        <th>Length (mm)</th>
+        <th>{{ 'parts.cabinet' | tr }}</th>
+        <th>{{ 'parts.lengthMm' | tr }}</th>
       </tr>
     </thead>
     <tbody>
@@ -89,7 +89,9 @@
         </tr>
       }
       <tr class="total-row">
-        <td><strong>Total (+10%)</strong></td>
+        <td>
+          <strong>{{ 'parts.totalWithMargin' | tr }}</strong>
+        </td>
         <td>
           <strong
             >{{ edgeBanding().totalMm }} mm ({{

@@ -1,0 +1,68 @@
+<svg class="cabinet-mini-preview" width="80" height="120" viewBox="0 0 80 120">
+  <!-- Body outline -->
+  <rect
+    x="5"
+    y="5"
+    width="70"
+    height="90"
+    fill="#f5ead0"
+    stroke="#8B4513"
+    stroke-width="1"
+    rx="1"
+  />
+
+  <!-- Side panels -->
+  <rect x="5" y="5" width="6" height="90" fill="rgba(139,69,19,0.5)" />
+  <rect x="69" y="5" width="6" height="90" fill="rgba(139,69,19,0.5)" />
+
+  <!-- Top rail -->
+  <rect x="11" y="5" width="58" height="5" fill="rgba(70,130,180,0.5)" />
+
+  <!-- Bottom -->
+  <rect x="11" y="88" width="58" height="5" fill="rgba(34,139,34,0.5)" />
+
+  <!-- Drawer lines (if drawers configured) -->
+  @if (drawerCount() > 1) {
+    @for (line of drawerLines(); track $index) {
+      <line x1="14" [attr.y1]="line" x2="66" [attr.y2]="line" stroke="#e67e00" stroke-width="1" />
+    }
+    <!-- Drawer fill -->
+    <rect x="14" y="12" width="52" [attr.height]="74" fill="rgba(255,140,0,0.1)" stroke="none" />
+  }
+  @if (drawerCount() === 1) {
+    <rect
+      x="14"
+      y="12"
+      width="52"
+      height="74"
+      fill="rgba(255,140,0,0.1)"
+      stroke="#e67e00"
+      stroke-width="0.5"
+    />
+  }
+
+  <!-- Legs -->
+  <rect
+    x="10"
+    y="95"
+    width="8"
+    height="15"
+    fill="none"
+    stroke="#666"
+    stroke-width="0.8"
+    stroke-dasharray="2,2"
+  />
+  <rect
+    x="62"
+    y="95"
+    width="8"
+    height="15"
+    fill="none"
+    stroke="#666"
+    stroke-width="0.8"
+    stroke-dasharray="2,2"
+  />
+
+  <!-- Width label -->
+  <text x="40" y="118" text-anchor="middle" font-size="8" fill="#888">{{ width() }}</text>
+</svg>

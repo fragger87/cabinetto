@@ -10,6 +10,7 @@
     "test:coverage": "ng test --coverage",
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "e2e": "playwright test",
     "prepare": "husky"
   },
   "private": true,
@@ -29,6 +30,7 @@
     "@angular/cli": "^21.2.3",
     "@angular/compiler-cli": "^21.2.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.58.2",
     "@vitest/coverage-v8": "^4.1.0",
     "angular-eslint": "21.3.1",
     "eslint": "^10.0.3",
@@ -42,8 +44,15 @@
     "vitest": "^4.0.8"
   },
   "lint-staged": {
-    "src/**/*.ts": ["eslint --fix", "prettier --write"],
-    "src/**/*.html": ["prettier --write --parser angular"],
-    "src/**/*.scss": ["prettier --write"]
+    "src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.html": [
+      "prettier --write --parser angular"
+    ],
+    "src/**/*.scss": [
+      "prettier --write"
+    ]
   }
 }

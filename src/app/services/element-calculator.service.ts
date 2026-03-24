@@ -6,6 +6,8 @@ import {
   EdgeBandingEntry,
   EdgeBandingResult,
   HardwareResult,
+  DRAWER_BACK_CLEARANCE,
+  HdfMountType,
 } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -18,11 +20,10 @@ export class ElementCalculatorService {
     cabinets: Cabinet[],
     depth: number,
     board: BoardSpec,
-    bottomMode: 'full' | 'recessed',
     railWidth: number,
   ): CutPiece[] {
     const thickness = board.thickness;
-    const bottomDepth = bottomMode === 'full' ? depth : depth - thickness;
+    const bottomDepth = depth;
     const pieces: CutPiece[] = [];
 
     for (const cab of cabinets) {
@@ -67,18 +68,27 @@ export class ElementCalculatorService {
     cabinets: Cabinet[],
     depth: number,
     boardThickness: number,
-    drawerBottomMount: 'under' | 'grooved' = 'under',
+    drawerBottomMount: HdfMountType = 'nailed',
     drawerBottomOverlap = 8,
+    backPanelMount: HdfMountType = 'nailed',
+    backPanelOverlap = 8,
   ): CutPiece[] {
     const pieces: CutPiece[] = [];
 
     for (const cab of cabinets) {
       const innerW = cab.width - 2 * boardThickness;
+      // nailed: backH = bodyHeight - thickness (top rail only)
+      // grooved: backH = bodyHeight - 2×thickness + 2×overlap (between both rails, into grooves)
+      const backW = backPanelMount === 'nailed' ? innerW : innerW + 2 * backPanelOverlap;
+      const backHFinal =
+        backPanelMount === 'nailed'
+          ? cab.bodyHeight - boardThickness
+          : cab.bodyHeight - 2 * boardThickness + 2 * backPanelOverlap;
 
       pieces.push({
         name: `Back panel [${cab.name}]`,
-        width: innerW,
-        height: cab.bodyHeight - boardThickness,
+        width: backW,
+        height: backHFinal,
         materialType: 'hdf_3mm',
         sourceCabinet: cab.name,
         quantity: cab.quantity,
@@ -86,16 +96,14 @@ export class ElementCalculatorService {
 
       if (cab.drawers && cab.drawers.count > 0) {
         const drawerW = innerW - 2 * cab.drawers.slideClearance;
-        const backClearance = 20;
+        const backClearance = DRAWER_BACK_CLEARANCE;
         const drawerD = depth - cab.drawers.frontGap - backClearance;
         const matT = cab.drawers.drawerMaterialThickness;
 
-        // under: HDF = outer drawer box dimensions (sits under sides)
-        // grooved: HDF = inner dimensions + 2×overlap (captured in grooves)
         const bottomW =
-          drawerBottomMount === 'under' ? drawerW : drawerW - 2 * matT + 2 * drawerBottomOverlap;
+          drawerBottomMount === 'nailed' ? drawerW : drawerW - 2 * matT + 2 * drawerBottomOverlap;
         const bottomD =
-          drawerBottomMount === 'under' ? drawerD : drawerD - 2 * matT + 2 * drawerBottomOverlap;
+          drawerBottomMount === 'nailed' ? drawerD : drawerD - 2 * matT + 2 * drawerBottomOverlap;
 
         pieces.push({
           name: `Drawer bottom [${cab.name}]`,

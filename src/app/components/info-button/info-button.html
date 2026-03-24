@@ -1,0 +1,25 @@
+<span class="info-btn" (click)="open()" (keydown.enter)="open()" role="button" tabindex="0">i</span>
+
+@if (isOpen()) {
+  <div
+    class="info-overlay"
+    (click)="close()"
+    (keydown.escape)="close()"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div
+      class="info-dialog"
+      (click)="$event.stopPropagation()"
+      (keydown.escape)="close()"
+      role="document"
+      tabindex="-1"
+    >
+      <div class="info-header">
+        <strong>{{ title() }}</strong>
+        <button type="button" class="info-close" (click)="close()">&times;</button>
+      </div>
+      <div class="info-body" [innerHTML]="description()"></div>
+    </div>
+  </div>
+}

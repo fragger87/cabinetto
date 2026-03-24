@@ -5,23 +5,31 @@
   role="dialog"
   aria-modal="true"
 >
-  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
-  <div class="detail-panel" (click)="$event.stopPropagation()">
+  <div
+    class="detail-panel"
+    (click)="$event.stopPropagation()"
+    (keydown.escape)="onClose()"
+    role="document"
+    tabindex="-1"
+  >
     <div class="panel-header">
       <h3>{{ cabinet().name }}</h3>
-      <span class="dims">{{ cabinet().width }} mm wide &middot; Qty: {{ cabinet().quantity }}</span>
+      <span class="dims"
+        >{{ cabinet().width }} mm wide &middot; {{ 'report.qty' | tr }}:
+        {{ cabinet().quantity }}</span
+      >
       <button type="button" class="close-btn" (click)="onClose()">&times;</button>
     </div>
 
     <!-- 18mm Carcass Parts -->
-    <h4>Carcass Parts (18 mm)</h4>
+    <h4>{{ 'detail.carcassParts' | tr }}</h4>
     <table>
       <thead>
         <tr>
-          <th>Element</th>
-          <th>Width</th>
-          <th>Height</th>
-          <th>Qty</th>
+          <th>{{ 'parts.element' | tr }}</th>
+          <th>{{ 'report.width' | tr }}</th>
+          <th>{{ 'report.bodyHeight' | tr }}</th>
+          <th>{{ 'report.qty' | tr }}</th>
         </tr>
       </thead>
       <tbody>
@@ -38,14 +46,14 @@
 
     <!-- 15mm Drawer Parts -->
     @if (bom().pieces15mm.length > 0) {
-      <h4>Drawer Parts (15 mm)</h4>
+      <h4>{{ 'detail.drawerParts' | tr }}</h4>
       <table>
         <thead>
           <tr>
-            <th>Element</th>
-            <th>Width</th>
-            <th>Height</th>
-            <th>Qty</th>
+            <th>{{ 'parts.element' | tr }}</th>
+            <th>{{ 'report.width' | tr }}</th>
+            <th>{{ 'report.bodyHeight' | tr }}</th>
+            <th>{{ 'report.qty' | tr }}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,21 +69,22 @@
       </table>
 
       <div class="drawer-info">
-        <strong>Layout:</strong> {{ cabinet().drawers?.layout }} &middot; <strong>Count:</strong>
+        <strong>{{ 'detail.layout' | tr }}:</strong> {{ cabinet().drawers?.layout }} &middot;
+        <strong>{{ 'detail.count' | tr }}:</strong>
         {{ cabinet().drawers?.count }}
       </div>
     }
 
     <!-- HDF Parts -->
     @if (bom().piecesHdf.length > 0) {
-      <h4>HDF Parts (3 mm)</h4>
+      <h4>{{ 'detail.hdfParts' | tr }}</h4>
       <table>
         <thead>
           <tr>
-            <th>Element</th>
-            <th>Width</th>
-            <th>Height</th>
-            <th>Qty</th>
+            <th>{{ 'parts.element' | tr }}</th>
+            <th>{{ 'report.width' | tr }}</th>
+            <th>{{ 'report.bodyHeight' | tr }}</th>
+            <th>{{ 'report.qty' | tr }}</th>
           </tr>
         </thead>
         <tbody>
@@ -93,7 +102,7 @@
 
     <!-- Summary -->
     <div class="panel-summary">
-      <span>Edge banding: {{ bom().edgeBandingMm | number: '1.0-0' }} mm</span>
+      <span>{{ 'detail.edgeBanding' | tr }}: {{ bom().edgeBandingMm | number: '1.0-0' }} mm</span>
     </div>
   </div>
 </div>

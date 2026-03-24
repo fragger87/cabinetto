@@ -1,15 +1,19 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { PersistenceService } from '../../persistence/persistence.service';
 import { ProjectStateService } from '../../services/project-state.service';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-project-toolbar',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './project-toolbar.html',
 })
 export class ProjectToolbar {
   private readonly persistence = inject(PersistenceService);
   private readonly state = inject(ProjectStateService);
+  private readonly i18n = inject(I18nService);
   private readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   protected readonly error = signal<string | null>(null);
@@ -17,16 +21,16 @@ export class ProjectToolbar {
 
   protected save(): void {
     this.persistence.save(this.state.snapshot());
-    this.flash('Saved to browser storage');
+    this.flash(this.i18n.t('toolbar.saved'));
   }
 
   protected load(): void {
     const config = this.persistence.load();
     if (config) {
       this.state.replace(config);
-      this.flash('Loaded from browser storage');
+      this.flash(this.i18n.t('toolbar.loaded'));
     } else {
-      this.showError('No saved project found');
+      this.showError(this.i18n.t('toolbar.noSaved'));
     }
   }
 
@@ -46,7 +50,7 @@ export class ProjectToolbar {
     try {
       const config = await this.persistence.importJson(file);
       this.state.replace(config);
-      this.flash('Imported successfully');
+      this.flash(this.i18n.t('toolbar.importSuccess'));
     } catch (e) {
       this.showError(e instanceof Error ? e.message : 'Import failed');
     }

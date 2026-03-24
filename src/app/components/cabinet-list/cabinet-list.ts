@@ -3,13 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { ProjectStateService } from '../../services/project-state.service';
 import { DrawerConfigForm } from '../drawer-config/drawer-config';
 import { Cabinet, DrawerConfig } from '../../models';
+import { SvgCabinetMini } from '../svg-cabinet-mini/svg-cabinet-mini';
+import { InfoButton } from '../info-button/info-button';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 type CabinetInput = Omit<Cabinet, 'bodyHeight' | 'legHeight'>;
 
 @Component({
   selector: 'app-cabinet-list',
   standalone: true,
-  imports: [FormsModule, DrawerConfigForm],
+  imports: [FormsModule, DrawerConfigForm, SvgCabinetMini, InfoButton, TranslatePipe],
   templateUrl: './cabinet-list.html',
 })
 export class CabinetList {

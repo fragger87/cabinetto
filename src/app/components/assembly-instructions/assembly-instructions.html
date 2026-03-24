@@ -1,0 +1,29 @@
+<section class="assembly-instructions">
+  <h3>{{ 'assembly.title' | tr }}</h3>
+
+  <div class="instruction-block">
+    <h4>{{ 'assembly.carcass' | tr }}</h4>
+
+    <app-svg-assembly-carcass />
+
+    <ol>
+      @for (step of carcassSteps(); track $index) {
+        <li>{{ step }}</li>
+      }
+    </ol>
+  </div>
+
+  @if (hasDrawers()) {
+    <div class="instruction-block">
+      <h4>{{ 'assembly.drawer' | tr }}</h4>
+
+      <app-svg-assembly-drawer />
+
+      <ol>
+        @for (step of drawerSteps(); track $index) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+    </div>
+  }
+</section>

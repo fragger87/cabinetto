@@ -4,7 +4,8 @@
   @for (layout of layouts(); track layout.boardIndex) {
     <div class="board-container">
       <h4>
-        Board {{ layout.boardIndex + 1 }} — Utilization: {{ layout.utilization | number: '1.1-1' }}%
+        {{ 'cutting.board' | tr }} {{ layout.boardIndex + 1 }} — {{ 'report.utilization' | tr }}:
+        {{ layout.utilization | number: '1.1-1' }}%
       </h4>
       <svg [attr.width]="svgWidth(layout)" [attr.height]="svgHeight(layout)" class="board-svg">
         <rect
@@ -51,6 +52,6 @@
   }
 
   @if (layouts().length === 0) {
-    <p>No boards to display.</p>
+    <p>{{ 'cutting.noBoards' | tr }}</p>
   }
 </section>

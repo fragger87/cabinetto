@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Cabinet, CutPiece, DrawerConfig, DRAWER_DEFAULTS } from '../models';
+import {
+  Cabinet,
+  CutPiece,
+  DrawerConfig,
+  DRAWER_BACK_CLEARANCE,
+  HDF_BOTTOM_THICKNESS,
+} from '../models';
 
 const MIN_DRAWER_HEIGHT = 60;
 
@@ -20,7 +26,7 @@ export class DrawerCalculatorService {
 
     const innerW = cab.width - 2 * boardThickness;
     const drawerInnerW = innerW - 2 * cfg.slideClearance;
-    const backClearance = 20; // mm — HDF back panel + mounting clearance
+    const backClearance = DRAWER_BACK_CLEARANCE;
     const drawerDepth = depth - cfg.frontGap - backClearance;
     const heights = this.computeHeights(cab.bodyHeight, cfg, boardThickness);
 
@@ -32,15 +38,17 @@ export class DrawerCalculatorService {
   /**
    * Generate 15mm cut pieces for drawer boxes.
    */
-  calculateDrawerPieces(cabinets: Cabinet[], depth: number, boardThickness: number): CutPiece[] {
+  calculateDrawerPieces(
+    cabinets: Cabinet[],
+    depth: number,
+    boardThickness: number,
+    drawerMaterialType = '15mm',
+  ): CutPiece[] {
     const pieces: CutPiece[] = [];
 
     for (const cab of cabinets) {
       const dims = this.computeDimensions(cab, depth, boardThickness);
       if (!dims) continue;
-
-      const matThick =
-        cab.drawers?.drawerMaterialThickness ?? DRAWER_DEFAULTS.drawerMaterialThickness;
 
       for (let d = 0; d < dims.heights.length; d++) {
         const h = dims.heights[d];
@@ -50,7 +58,7 @@ export class DrawerCalculatorService {
           name: `${label} Side`,
           width: dims.depth,
           height: h,
-          materialType: '15mm',
+          materialType: drawerMaterialType,
           sourceCabinet: cab.name,
           quantity: 2 * cab.quantity,
         });
@@ -59,7 +67,7 @@ export class DrawerCalculatorService {
           name: `${label} Front`,
           width: dims.innerWidth,
           height: h,
-          materialType: '15mm',
+          materialType: drawerMaterialType,
           sourceCabinet: cab.name,
           quantity: cab.quantity,
         });
@@ -67,8 +75,8 @@ export class DrawerCalculatorService {
         pieces.push({
           name: `${label} Back`,
           width: dims.innerWidth,
-          height: h - matThick,
-          materialType: '15mm',
+          height: h,
+          materialType: drawerMaterialType,
           sourceCabinet: cab.name,
           quantity: cab.quantity,
         });
@@ -79,7 +87,7 @@ export class DrawerCalculatorService {
   }
 
   private computeHeights(bodyHeight: number, cfg: DrawerConfig, boardThickness: number): number[] {
-    const hdfBottomThickness = 3; // each drawer box has a 3mm HDF bottom
+    const hdfBottomThickness = HDF_BOTTOM_THICKNESS;
     // Subtract: top rail + cabinet bottom panel + (N+1) gaps + N drawer HDF bottoms
     const usable =
       bodyHeight -

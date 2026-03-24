@@ -25,7 +25,11 @@ export class CuttingOptimizerService {
       if (!this.placePiece(current, piece, depth, kerf)) {
         current = this.createBoard(board, depth, kerf);
         boards.push(current);
-        this.placePiece(current, piece, depth, kerf);
+        if (!this.placePiece(current, piece, depth, kerf)) {
+          console.warn(
+            `Piece "${piece.name}" (${piece.width}×${piece.height}) cannot fit on board ${board.width}×${board.height} with depth ${depth}`,
+          );
+        }
       }
     }
 

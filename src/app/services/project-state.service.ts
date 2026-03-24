@@ -10,9 +10,7 @@ export class ProjectStateService {
 
   readonly config = this._config.asReadonly();
   readonly cabinets = computed(() => this._config().cabinets);
-  readonly board = computed(() => this._config().board);
-  readonly drawerBoard = computed(() => this._config().drawerBoard);
-  readonly hdfBoard = computed(() => this._config().hdfBoard);
+  readonly materials = computed(() => this._config().materials);
 
   update(partial: Partial<ProjectConfig>): void {
     this._config.update((prev) => ({ ...prev, ...partial }));

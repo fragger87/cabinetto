@@ -16,3 +16,9 @@ export const DRAWER_DEFAULTS: Omit<DrawerConfig, 'count' | 'layout'> = {
   drawerGap: 3,
   drawerMaterialThickness: 15,
 };
+
+/** Back clearance between drawer box rear and cabinet back panel (mm). */
+export const DRAWER_BACK_CLEARANCE = 20;
+
+/** HDF drawer bottom thickness (mm). Used in height calculations. */
+export const HDF_BOTTOM_THICKNESS = 3;

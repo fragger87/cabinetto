@@ -1,23 +1,27 @@
 <header>
-  <h1>Cabinet Calculator</h1>
+  <h1>{{ 'app.title' | tr }}</h1>
   <app-project-toolbar />
+  <app-language-selector />
 </header>
 
 <main>
   <section class="input-panel">
-    <app-board-spec-form />
+    <app-material-library />
+    <app-material-assignment />
     <app-global-settings-form />
     <app-cabinet-list />
 
     <div class="actions">
-      <button type="button" class="calculate-btn" (click)="calculate()">Calculate</button>
+      <button type="button" class="calculate-btn" (click)="calculate()">
+        {{ 'app.calculate' | tr }}
+      </button>
       @if (error()) {
         <span class="error">{{ error() }}</span>
       }
     </div>
   </section>
 
-  @if (result() && bom()) {
-    <app-report-page [result]="result()!" [bom]="bom()!" />
+  @if (result() && bom() && lastConfig()) {
+    <app-report-page [result]="result()!" [bom]="bom()!" [config]="lastConfig()!" />
   }
 </main>

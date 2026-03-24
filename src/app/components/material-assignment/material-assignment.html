@@ -1,0 +1,35 @@
+<fieldset [formGroup]="form">
+  <legend>{{ 'materials.assignment' | tr }}</legend>
+
+  <div class="form-row">
+    <label for="kerf">{{ 'materials.kerf' | tr }}</label>
+    <input id="kerf" type="number" formControlName="kerf" />
+  </div>
+
+  <div class="form-row">
+    <label for="carcassMaterial">{{ 'materials.carcass' | tr }}</label>
+    <select id="carcassMaterial" formControlName="carcassMaterialIndex">
+      @for (mat of materials; track $index) {
+        <option [ngValue]="$index">{{ mat.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="drawerMaterial">{{ 'materials.drawer' | tr }}</label>
+    <select id="drawerMaterial" formControlName="drawerMaterialIndex">
+      @for (mat of materials; track $index) {
+        <option [ngValue]="$index">{{ mat.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="hdfMaterial">{{ 'materials.hdf' | tr }}</label>
+    <select id="hdfMaterial" formControlName="hdfMaterialIndex">
+      @for (mat of materials; track $index) {
+        <option [ngValue]="$index">{{ mat.name }}</option>
+      }
+    </select>
+  </div>
+</fieldset>

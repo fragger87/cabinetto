@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { OptimizationOrchestratorService } from './optimization-orchestrator.service';
-import { ProjectConfig } from '../models';
+import { ProjectConfig, DEFAULT_MATERIALS } from '../models';
 
 describe('OptimizationOrchestratorService', () => {
   let service: OptimizationOrchestratorService;
@@ -13,15 +13,18 @@ describe('OptimizationOrchestratorService', () => {
   function makeConfig(overrides: Partial<ProjectConfig> = {}): ProjectConfig {
     return {
       cabinetType: 'base',
-      board: { width: 2800, height: 2070, thickness: 18, kerf: 4 },
-      drawerBoard: { width: 2800, height: 2070, thickness: 15, kerf: 4 },
-      hdfBoard: { width: 2800, height: 2070, thickness: 3, kerf: 4 },
+      materials: DEFAULT_MATERIALS.map((m) => ({ ...m })),
+      kerf: 4,
+      carcassMaterialIndex: 0,
+      drawerMaterialIndex: 1,
+      hdfMaterialIndex: 2,
       totalHeight: 890,
       legs: { min: 95, max: 165 },
       depth: { min: 500, max: 550 },
-      bottomMode: 'full',
       railWidth: 80,
-      drawerBottomMount: 'under',
+      drawerBottomMount: 'nailed',
+      backPanelMount: 'nailed',
+      backPanelOverlap: 8,
       drawerBottomOverlap: 8,
       cabinets: [
         { name: 'Cabinet 60cm', width: 600, quantity: 3 },

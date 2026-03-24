@@ -12,57 +12,60 @@ export function isRange(value: PolymorphicValue): value is RangeValue {
   return typeof value === 'object' && 'min' in value && 'max' in value;
 }
 
-export type DrawerBottomMount = 'under' | 'grooved';
+export type HdfMountType = 'nailed' | 'grooved';
+
+export interface Material {
+  name: string;
+  width: number; // mm
+  height: number; // mm
+  thickness: number; // mm
+  edgeBanding: string; // banding symbol/name for exports (e.g. "PCV_1", "ABS 0.5mm White")
+}
 
 export interface ProjectConfig {
   cabinetType: CabinetType;
-  board: BoardSpec;
-  drawerBoard: BoardSpec;
-  hdfBoard: BoardSpec;
+  materials: Material[];
+  kerf: number; // global saw kerf, mm
+  carcassMaterialIndex: number;
+  drawerMaterialIndex: number;
+  hdfMaterialIndex: number;
   totalHeight: number;
   legs: PolymorphicValue;
   depth: PolymorphicValue;
-  bottomMode: 'full' | 'recessed';
   railWidth: number;
-  drawerBottomMount: DrawerBottomMount;
-  drawerBottomOverlap: number; // mm, groove depth for 'grooved' mode (default 8)
+  drawerBottomMount: HdfMountType;
+  drawerBottomOverlap: number;
+  backPanelMount: HdfMountType;
+  backPanelOverlap: number;
   cabinets: Omit<Cabinet, 'bodyHeight' | 'legHeight'>[];
 }
 
-export const DEFAULT_BOARD: BoardSpec = {
-  width: 2800,
-  height: 2070,
-  thickness: 18,
-  kerf: 4,
-};
+export const DEFAULT_MATERIALS: Material[] = [
+  { name: 'Particleboard 18mm', width: 2800, height: 2070, thickness: 18, edgeBanding: 'PCV_1' },
+  { name: 'Particleboard 15mm', width: 2800, height: 2070, thickness: 15, edgeBanding: 'PCV_2' },
+  { name: 'HDF 3mm', width: 2800, height: 2070, thickness: 3, edgeBanding: '' },
+];
 
-export const DEFAULT_DRAWER_BOARD: BoardSpec = {
-  width: 2800,
-  height: 2070,
-  thickness: 15,
-  kerf: 4,
-};
-
-export const DEFAULT_HDF_BOARD: BoardSpec = {
-  width: 2800,
-  height: 2070,
-  thickness: 3,
-  kerf: 4,
-};
+export function materialToBoardSpec(material: Material, kerf: number): BoardSpec {
+  return { width: material.width, height: material.height, thickness: material.thickness, kerf };
+}
 
 export function createDefaultConfig(): ProjectConfig {
   return {
     cabinetType: 'base',
-    board: { ...DEFAULT_BOARD },
-    drawerBoard: { ...DEFAULT_DRAWER_BOARD },
-    hdfBoard: { ...DEFAULT_HDF_BOARD },
+    materials: DEFAULT_MATERIALS.map((m) => ({ ...m })),
+    kerf: 4,
+    carcassMaterialIndex: 0,
+    drawerMaterialIndex: 1,
+    hdfMaterialIndex: 2,
     totalHeight: 890,
     legs: { min: 95, max: 165 },
     depth: { min: 500, max: 550 },
-    bottomMode: 'full',
     railWidth: 80,
-    drawerBottomMount: 'under',
+    drawerBottomMount: 'nailed',
     drawerBottomOverlap: 8,
+    backPanelMount: 'nailed',
+    backPanelOverlap: 8,
     cabinets: [],
   };
 }

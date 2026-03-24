@@ -1,5 +1,5 @@
 import { Component, input, computed } from '@angular/core';
-import { Cabinet, BoardSpec } from '../../models';
+import { Cabinet, BoardSpec, DRAWER_BACK_CLEARANCE, HDF_BOTTOM_THICKNESS } from '../../models';
 
 const S = 0.25;
 const MARGIN = 50;
@@ -13,7 +13,6 @@ export class CabinetSideView {
   readonly cabinet = input.required<Cabinet>();
   readonly depth = input.required<number>();
   readonly board = input.required<BoardSpec>();
-  readonly bottomMode = input<'full' | 'recessed'>('full');
   readonly railWidth = input(80);
 
   protected readonly s = S;
@@ -26,13 +25,13 @@ export class CabinetSideView {
     const bodyH = cab.bodyHeight;
     const legH = cab.legHeight;
     const rw = this.railWidth();
-    const bottomDepth = this.bottomMode() === 'full' ? d : d - t;
-    const hdfThickness = 3;
+    const bottomDepth = d;
+    const hdfThickness = HDF_BOTTOM_THICKNESS;
 
     const hasDrawers = !!(cab.drawers && cab.drawers.count > 0);
     const frontGap = hasDrawers ? cab.drawers!.frontGap : 0;
     const slideClearance = hasDrawers ? cab.drawers!.slideClearance : 0;
-    const backClearance = 20;
+    const backClearance = DRAWER_BACK_CLEARANCE;
     const drawerDepth = hasDrawers ? d - frontGap - backClearance : 0;
 
     return {

@@ -1,11 +1,13 @@
 import { Component, input, output, OnInit, OnChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DrawerConfig, DrawerLayout, DRAWER_DEFAULTS } from '../../models';
+import { InfoButton } from '../info-button/info-button';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-drawer-config',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, InfoButton, TranslatePipe],
   templateUrl: './drawer-config.html',
 })
 export class DrawerConfigForm implements OnInit, OnChanges {

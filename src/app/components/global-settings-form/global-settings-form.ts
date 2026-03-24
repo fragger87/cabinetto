@@ -3,11 +3,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ProjectStateService } from '../../services/project-state.service';
 import { PolymorphicField } from '../polymorphic-field/polymorphic-field';
 import { CabinetType, PolymorphicValue } from '../../models';
+import { SvgCabinetProfile } from '../svg-cabinet-profile/svg-cabinet-profile';
+import { InfoButton } from '../info-button/info-button';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-global-settings-form',
   standalone: true,
-  imports: [ReactiveFormsModule, PolymorphicField],
+  imports: [ReactiveFormsModule, PolymorphicField, SvgCabinetProfile, InfoButton, TranslatePipe],
   templateUrl: './global-settings-form.html',
 })
 export class GlobalSettingsForm implements OnInit {
@@ -17,10 +20,11 @@ export class GlobalSettingsForm implements OnInit {
   readonly form: FormGroup = this.fb.group({
     cabinetType: ['base', Validators.required],
     totalHeight: [890, [Validators.required, Validators.min(200)]],
-    bottomMode: ['full', Validators.required],
     railWidth: [80, [Validators.required, Validators.min(1)]],
-    drawerBottomMount: ['under', Validators.required],
+    drawerBottomMount: ['nailed', Validators.required],
     drawerBottomOverlap: [8, [Validators.required, Validators.min(1)]],
+    backPanelMount: ['nailed', Validators.required],
+    backPanelOverlap: [8, [Validators.required, Validators.min(1)]],
   });
 
   protected legs: PolymorphicValue = { min: 95, max: 165 };
@@ -34,10 +38,11 @@ export class GlobalSettingsForm implements OnInit {
         {
           cabinetType: config.cabinetType,
           totalHeight: config.totalHeight,
-          bottomMode: config.bottomMode,
           railWidth: config.railWidth,
           drawerBottomMount: config.drawerBottomMount,
           drawerBottomOverlap: config.drawerBottomOverlap,
+          backPanelMount: config.backPanelMount,
+          backPanelOverlap: config.backPanelOverlap,
         },
         { emitEvent: false },
       );

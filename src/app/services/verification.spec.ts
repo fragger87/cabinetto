@@ -8,14 +8,7 @@ import { CuttingOptimizerService } from './cutting-optimizer.service';
 import { ElementCalculatorService } from './element-calculator.service';
 import { DepthOptimizerService } from './depth-optimizer.service';
 import { OptimizationOrchestratorService } from './optimization-orchestrator.service';
-import {
-  BoardSpec,
-  Cabinet,
-  CutPiece,
-  ProjectConfig,
-  DEFAULT_DRAWER_BOARD,
-  DEFAULT_HDF_BOARD,
-} from '../models';
+import { BoardSpec, Cabinet, CutPiece, ProjectConfig, DEFAULT_MATERIALS } from '../models';
 
 describe('US016: Python prototype verification', () => {
   let cutter: CuttingOptimizerService;
@@ -25,9 +18,14 @@ describe('US016: Python prototype verification', () => {
 
   const board: BoardSpec = { width: 2800, height: 2070, thickness: 18, kerf: 4 };
   const baseConfig = {
-    drawerBoard: { ...DEFAULT_DRAWER_BOARD },
-    hdfBoard: { ...DEFAULT_HDF_BOARD },
-    drawerBottomMount: 'under' as const,
+    materials: DEFAULT_MATERIALS.map((m) => ({ ...m })),
+    kerf: 4,
+    carcassMaterialIndex: 0,
+    drawerMaterialIndex: 1,
+    hdfMaterialIndex: 2,
+    drawerBottomMount: 'nailed' as const,
+    backPanelMount: 'nailed' as const,
+    backPanelOverlap: 8,
     drawerBottomOverlap: 8,
   };
 
@@ -87,7 +85,7 @@ describe('US016: Python prototype verification', () => {
         { name: 'C60', width: 600, quantity: 1, bodyHeight: 740, legHeight: 150 },
       ];
 
-      const pieces = elements.calculateCarcass(cabs, 514, board, 'full', 80);
+      const pieces = elements.calculateCarcass(cabs, 514, board, 80);
 
       // Sides: 2 × (740 × 514)
       const sides = pieces.find((p) => p.name.includes('Side'));
@@ -108,16 +106,16 @@ describe('US016: Python prototype verification', () => {
       expect(rail?.quantity).toBe(2);
     });
 
-    it('should handle recessed bottom mode', () => {
+    it('should always use full depth for bottom', () => {
       const cabs: Cabinet[] = [
         { name: 'C60', width: 600, quantity: 1, bodyHeight: 740, legHeight: 150 },
       ];
 
-      const pieces = elements.calculateCarcass(cabs, 514, board, 'recessed', 80);
+      const pieces = elements.calculateCarcass(cabs, 514, board, 80);
       const bottom = pieces.find((p) => p.name.includes('Bottom'));
 
-      // Recessed: depth - thickness = 514 - 18 = 496
-      expect(bottom?.height).toBe(496);
+      // Bottom is always full depth
+      expect(bottom?.height).toBe(514);
     });
   });
 
@@ -125,12 +123,10 @@ describe('US016: Python prototype verification', () => {
     it('should optimize 3×600mm + 1×300mm base cabinets with ranges', () => {
       const config: ProjectConfig = {
         cabinetType: 'base',
-        board,
         ...baseConfig,
         totalHeight: 890,
         legs: { min: 95, max: 165 },
         depth: { min: 500, max: 550 },
-        bottomMode: 'full',
         railWidth: 80,
         cabinets: [
           { name: 'Cabinet 60cm', width: 600, quantity: 3 },
@@ -171,12 +167,10 @@ describe('US016: Python prototype verification', () => {
     it('should handle fixed legs + fixed depth (no optimization)', () => {
       const config: ProjectConfig = {
         cabinetType: 'base',
-        board,
         ...baseConfig,
         totalHeight: 890,
         legs: 150,
         depth: 514,
-        bottomMode: 'full',
         railWidth: 80,
         cabinets: [{ name: 'Solo', width: 600, quantity: 1 }],
       };
@@ -193,12 +187,10 @@ describe('US016: Python prototype verification', () => {
     it('should handle mixed cabinet heights', () => {
       const config: ProjectConfig = {
         cabinetType: 'base',
-        board,
         ...baseConfig,
         totalHeight: 890,
         legs: 150,
         depth: 514,
-        bottomMode: 'full',
         railWidth: 80,
         cabinets: [
           { name: 'Tall', width: 600, quantity: 1, totalHeight: 890 },

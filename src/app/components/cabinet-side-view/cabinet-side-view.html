@@ -142,10 +142,8 @@
         </text>
       }
 
-      <!-- Bottom mode label -->
-      <text x="4" [attr.y]="(l.bodyH - 4) * s" font-size="7" fill="#228B22">
-        {{ l.bottomDepth === l.depth ? 'full' : 'recessed' }}
-      </text>
+      <!-- Bottom depth label -->
+      <text x="4" [attr.y]="(l.bodyH - 4) * s" font-size="7" fill="#228B22">full</text>
 
       <!-- Leg height (left) -->
       @if (l.legH > 0) {

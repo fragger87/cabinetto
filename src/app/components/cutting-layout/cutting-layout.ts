@@ -1,13 +1,14 @@
 import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { BoardLayout, PlacedPiece } from '../../models';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 const SCALE = 0.2; // 0.2px per mm
 
 @Component({
   selector: 'app-cutting-layout',
   standalone: true,
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, TranslatePipe],
   templateUrl: './cutting-layout.html',
 })
 export class CuttingLayout {

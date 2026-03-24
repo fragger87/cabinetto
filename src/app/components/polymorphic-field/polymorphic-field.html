@@ -1,9 +1,14 @@
 <fieldset class="polymorphic-field">
-  <legend>{{ label() }} (mm)</legend>
+  <legend>
+    {{ label() }} (mm)
+    @if (helpKey()) {
+      <app-info-button [helpKey]="helpKey()" />
+    }
+  </legend>
 
   <label class="toggle">
     <input type="checkbox" [checked]="isRangeMode" (change)="toggleMode()" />
-    Optimize (range)
+    {{ 'settings.optimize' | tr }}
   </label>
 
   @if (isRangeMode) {

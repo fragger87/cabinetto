@@ -1,5 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { BoardSpec, Cabinet, CutPiece, BoardLayout, ProjectConfig, isRange } from '../models';
+import {
+  BoardSpec,
+  Cabinet,
+  CutPiece,
+  BoardLayout,
+  ProjectConfig,
+  isRange,
+  materialToBoardSpec,
+} from '../models';
 import { CuttingOptimizerService } from './cutting-optimizer.service';
 import { ElementCalculatorService } from './element-calculator.service';
 import { DepthOptimizerService } from './depth-optimizer.service';
@@ -26,6 +34,7 @@ export interface OptimizationResult {
   drawerPieces: CutPiece[];
   hdfLayouts: BoardLayout[];
   hdfPieces: CutPiece[];
+  board: BoardSpec;
   legTrials: TrialResult[];
   depthTrials: TrialResult[];
 }
@@ -38,153 +47,216 @@ export class OptimizationOrchestratorService {
   private readonly drawerCalc = inject(DrawerCalculatorService);
 
   run(config: ProjectConfig): OptimizationResult {
-    const board = config.board;
+    const carcassMat = config.materials[config.carcassMaterialIndex];
+    const drawerMat =
+      config.drawerMaterialIndex === config.carcassMaterialIndex
+        ? carcassMat
+        : config.materials[config.drawerMaterialIndex];
+    const hdfMat = config.materials[config.hdfMaterialIndex];
+    const board = materialToBoardSpec(carcassMat, config.kerf);
+    const drawerBoard = materialToBoardSpec(drawerMat, config.kerf);
+    const hdfBoard = materialToBoardSpec(hdfMat, config.kerf);
 
-    // Resolve fixed vs range for legs and depth
-    const legsFixed = !isRange(config.legs);
-    const depthFixed = !isRange(config.depth);
+    const { legHeight: bestLeg, legTrials } = this.optimizeLegs(config, board);
+    const { depth: bestDepth, depthTrials } = this.optimizeDepth(config, board, bestLeg);
 
-    const legMin = isRange(config.legs) ? config.legs.min : (config.legs as number);
-    const legMax = isRange(config.legs) ? config.legs.max : (config.legs as number);
-    const depthMin = isRange(config.depth) ? config.depth.min : (config.depth as number);
-    const depthMax = isRange(config.depth) ? config.depth.max : (config.depth as number);
-
-    // If depth is a range, compute heuristic seed for Stage 1
-    const seedDepth = depthFixed
-      ? depthMin
-      : this.depthOpt.heuristicDepth(depthMin, depthMax, board.height, board.kerf);
-
-    // Stage 1: Leg height optimization
-    const legTrials: TrialResult[] = [];
-    let bestLeg = legMin;
-
-    if (!legsFixed) {
-      let bestBoards = Infinity;
-      let bestUtil = 0;
-
-      for (let leg = legMin; leg <= legMax; leg += STEP) {
-        const cabs = this.buildCabinets(config, leg);
-        if (!cabs) continue;
-
-        const pieces = this.elements.calculateCarcass(
-          cabs,
-          seedDepth,
-          board,
-          config.bottomMode,
-          config.railWidth,
-        );
-        const layouts = this.cutter.optimize(pieces, board, seedDepth);
-        const trial = this.scoreTrial(leg, seedDepth, layouts, board);
-        legTrials.push(trial);
-
-        if (
-          trial.boardCount < bestBoards ||
-          (trial.boardCount === bestBoards && trial.utilization > bestUtil)
-        ) {
-          bestBoards = trial.boardCount;
-          bestUtil = trial.utilization;
-          bestLeg = leg;
-        }
-      }
-    }
-
-    // Stage 2: Depth optimization
-    const depthTrials: TrialResult[] = [];
-    let bestDepth = seedDepth;
-
-    if (!depthFixed) {
-      let bestBoards = Infinity;
-      let bestUtil = 0;
-
-      for (let d = depthMin; d <= depthMax; d += STEP) {
-        const cabs = this.buildCabinets(config, bestLeg);
-        if (!cabs) continue;
-
-        const pieces = this.elements.calculateCarcass(
-          cabs,
-          d,
-          board,
-          config.bottomMode,
-          config.railWidth,
-        );
-        const layouts = this.cutter.optimize(pieces, board, d);
-        const trial = this.scoreTrial(bestLeg, d, layouts, board);
-        depthTrials.push(trial);
-
-        if (
-          trial.boardCount < bestBoards ||
-          (trial.boardCount === bestBoards && trial.utilization > bestUtil)
-        ) {
-          bestBoards = trial.boardCount;
-          bestUtil = trial.utilization;
-          bestDepth = d;
-        }
-      }
-    } else {
-      bestDepth = depthMin;
-    }
-
-    // Final run with winning parameters
-    const finalCabs = this.buildCabinets(config, bestLeg)!;
-    const finalPieces = this.elements.calculateCarcass(
+    const finalCabs = this.buildCabinets(config, bestLeg, board.thickness, drawerBoard.thickness)!;
+    const { finalPieces, carcassLayouts, drawerPieces, drawerLayouts } = this.runCuttingPasses(
+      config,
       finalCabs,
-      bestDepth,
       board,
-      config.bottomMode,
-      config.railWidth,
-    );
-    const finalLayouts = this.cutter.optimize(finalPieces, board, bestDepth);
-
-    // 15mm drawer pass (uses dedicated drawer board spec)
-    const drawerPieces = this.drawerCalc.calculateDrawerPieces(
-      finalCabs,
+      drawerBoard,
       bestDepth,
-      board.thickness,
     );
-    const drawerBoard = config.drawerBoard;
-    const drawerLayouts =
-      drawerPieces.length > 0 ? this.cutter.optimize(drawerPieces, drawerBoard, bestDepth) : [];
-
-    // HDF layout (optimized with same guillotine bin packing)
-    const hdfPieces = this.elements.calculateHdf(
+    const { hdfPieces, hdfLayouts } = this.runHdfPass(
+      config,
       finalCabs,
+      board,
+      hdfBoard,
       bestDepth,
-      board.thickness,
-      config.drawerBottomMount,
-      config.drawerBottomOverlap,
     );
-    const hdfBoard = config.hdfBoard;
-    // Use full board height as strip depth — HDF pieces vary widely in size
-    const hdfLayouts =
-      hdfPieces.length > 0 ? this.cutter.optimize(hdfPieces, hdfBoard, hdfBoard.height) : [];
 
     return {
       legHeight: bestLeg,
       depth: bestDepth,
       cabinets: finalCabs,
-      carcassLayouts: finalLayouts,
+      carcassLayouts,
       carcassPieces: finalPieces,
       drawerLayouts,
       drawerPieces,
       hdfLayouts,
       hdfPieces,
+      board,
       legTrials,
       depthTrials,
     };
   }
 
-  private buildCabinets(config: ProjectConfig, legHeight: number): Cabinet[] | null {
+  private optimizeLegs(
+    config: ProjectConfig,
+    board: BoardSpec,
+  ): { legHeight: number; legTrials: TrialResult[] } {
+    const legMin = isRange(config.legs) ? config.legs.min : (config.legs as number);
+    const legMax = isRange(config.legs) ? config.legs.max : (config.legs as number);
+    const depthMin = isRange(config.depth) ? config.depth.min : (config.depth as number);
+    const depthMax = isRange(config.depth) ? config.depth.max : (config.depth as number);
+    const depthFixed = !isRange(config.depth);
+
+    const seedDepth = depthFixed
+      ? depthMin
+      : this.depthOpt.heuristicDepth(depthMin, depthMax, board.height, board.kerf);
+
+    if (!isRange(config.legs)) {
+      return { legHeight: legMin, legTrials: [] };
+    }
+
+    const legTrials: TrialResult[] = [];
+    let bestLeg = legMin;
+    let bestBoards = Infinity;
+    let bestUtil = 0;
+
+    for (let leg = legMin; leg <= legMax; leg += STEP) {
+      const cabs = this.buildCabinets(config, leg, board.thickness, board.thickness);
+      if (!cabs) continue;
+      const pieces = this.elements.calculateCarcass(cabs, seedDepth, board, config.railWidth);
+      const layouts = this.cutter.optimize(pieces, board, seedDepth);
+      const trial = this.scoreTrial(leg, seedDepth, layouts, board);
+      legTrials.push(trial);
+      if (
+        trial.boardCount < bestBoards ||
+        (trial.boardCount === bestBoards && trial.utilization > bestUtil)
+      ) {
+        bestBoards = trial.boardCount;
+        bestUtil = trial.utilization;
+        bestLeg = leg;
+      }
+    }
+
+    return { legHeight: bestLeg, legTrials };
+  }
+
+  private optimizeDepth(
+    config: ProjectConfig,
+    board: BoardSpec,
+    bestLeg: number,
+  ): { depth: number; depthTrials: TrialResult[] } {
+    const depthMin = isRange(config.depth) ? config.depth.min : (config.depth as number);
+    const depthMax = isRange(config.depth) ? config.depth.max : (config.depth as number);
+
+    if (!isRange(config.depth)) {
+      return { depth: depthMin, depthTrials: [] };
+    }
+
+    const depthTrials: TrialResult[] = [];
+    let bestDepth = depthMin;
+    let bestBoards = Infinity;
+    let bestUtil = 0;
+
+    for (let d = depthMin; d <= depthMax; d += STEP) {
+      const cabs = this.buildCabinets(config, bestLeg, board.thickness, board.thickness);
+      if (!cabs) continue;
+      const pieces = this.elements.calculateCarcass(cabs, d, board, config.railWidth);
+      const layouts = this.cutter.optimize(pieces, board, d);
+      const trial = this.scoreTrial(bestLeg, d, layouts, board);
+      depthTrials.push(trial);
+      if (
+        trial.boardCount < bestBoards ||
+        (trial.boardCount === bestBoards && trial.utilization > bestUtil)
+      ) {
+        bestBoards = trial.boardCount;
+        bestUtil = trial.utilization;
+        bestDepth = d;
+      }
+    }
+
+    return { depth: bestDepth, depthTrials };
+  }
+
+  private runCuttingPasses(
+    config: ProjectConfig,
+    cabs: Cabinet[],
+    board: BoardSpec,
+    drawerBoard: BoardSpec,
+    depth: number,
+  ) {
+    const carcassPieces = this.elements.calculateCarcass(cabs, depth, board, config.railWidth);
+    const drawerMatType = `${drawerBoard.thickness}mm`;
+    const drawerPieces = this.drawerCalc.calculateDrawerPieces(
+      cabs,
+      depth,
+      board.thickness,
+      drawerMatType,
+    );
+
+    if (config.drawerMaterialIndex === config.carcassMaterialIndex && drawerPieces.length > 0) {
+      const finalPieces = [...carcassPieces, ...drawerPieces];
+      return {
+        finalPieces,
+        carcassLayouts: this.cutter.optimize(finalPieces, board, depth),
+        drawerPieces,
+        drawerLayouts: [] as BoardLayout[],
+      };
+    }
+
+    return {
+      finalPieces: carcassPieces,
+      carcassLayouts: this.cutter.optimize(carcassPieces, board, depth),
+      drawerPieces,
+      drawerLayouts:
+        drawerPieces.length > 0 ? this.cutter.optimize(drawerPieces, drawerBoard, depth) : [],
+    };
+  }
+
+  private runHdfPass(
+    config: ProjectConfig,
+    cabs: Cabinet[],
+    board: BoardSpec,
+    hdfBoard: BoardSpec,
+    depth: number,
+  ) {
+    const hdfPieces = this.elements.calculateHdf(
+      cabs,
+      depth,
+      board.thickness,
+      config.drawerBottomMount,
+      config.drawerBottomOverlap,
+      config.backPanelMount,
+      config.backPanelOverlap,
+    );
+    const hdfLayouts =
+      hdfPieces.length > 0 ? this.cutter.optimize(hdfPieces, hdfBoard, hdfBoard.height) : [];
+    return { hdfPieces, hdfLayouts };
+  }
+
+  private buildCabinets(
+    config: ProjectConfig,
+    legHeight: number,
+    carcassThickness: number,
+    drawerThickness: number,
+  ): Cabinet[] | null {
+    const effectiveDrawerThickness =
+      config.drawerMaterialIndex === config.carcassMaterialIndex
+        ? carcassThickness
+        : drawerThickness;
+
     const cabs: Cabinet[] = [];
     for (const c of config.cabinets) {
       const totalH = c.totalHeight ?? config.totalHeight;
       const bodyHeight = config.cabinetType === 'base' ? totalH - legHeight : totalH;
       if (bodyHeight < MIN_BODY_HEIGHT) return null;
 
-      cabs.push({
+      const cab: Cabinet = {
         ...c,
         bodyHeight,
         legHeight: config.cabinetType === 'base' ? legHeight : 0,
-      });
+      };
+
+      // Propagate board thickness into drawer config
+      if (cab.drawers) {
+        cab.drawers = { ...cab.drawers, drawerMaterialThickness: effectiveDrawerThickness };
+      }
+
+      cabs.push(cab);
     }
     return cabs;
   }

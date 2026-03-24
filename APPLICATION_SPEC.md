@@ -121,6 +121,11 @@ All keys use camelCase English names.
   // OR: "depth": 514,                             // depth: fixed → no simulation
   "bottomMode": "full",                            // "full" | "recessed"
   "railWidth": 80,                                 // top rail width, mm
+  "backPanelMount": "nailed",                      // "nailed" | "grooved"
+  "backPanelOverlap": 8,                           // mm, groove depth (only if grooved)
+  "drawerBottomMount": "nailed",                   // "nailed" | "grooved"
+  "drawerBottomOverlap": 8,                        // mm, groove depth (only if grooved)
+  "drawerSameAsCarcass": false,                    // true = drawer pieces cut from carcass boards
   "cabinets": [
     {
       "name": "Cabinet 60cm",

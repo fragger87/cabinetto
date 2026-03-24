@@ -1,5 +1,5 @@
 import { Component, input, output, computed } from '@angular/core';
-import { Cabinet, BoardSpec } from '../../models';
+import { Cabinet, BoardSpec, HDF_BOTTOM_THICKNESS } from '../../models';
 
 const S = 0.25; // px per mm
 const MARGIN = 50; // px margin for dimension lines
@@ -41,7 +41,7 @@ export class CabinetFrontView {
     const drawers: DrawerRect[] = [];
     if (cab.drawers && cab.drawers.count > 0) {
       const gap = cab.drawers.drawerGap;
-      const hdfBottom = 3; // each drawer has 3mm HDF bottom
+      const hdfBottom = HDF_BOTTOM_THICKNESS;
       const usable = bodyH - t - t - (cab.drawers.count + 1) * gap - cab.drawers.count * hdfBottom;
       const drawerH = Math.floor(usable / cab.drawers.count);
       let y = t + gap; // start below rail + top gap
