@@ -58,8 +58,8 @@ Implement the two-stage parametric optimizer and guillotine-cut bin packing algo
 
 ## Architecture Impact
 
-- Core optimization services are pure functions: input ProjectConfig, output BoardLayout[]
-- Computation logic is framework-agnostic inside Angular services — enables Web Worker offloading if needed later
+- Core optimization services contain pure computation logic inside Angular DI: input ProjectConfig, output BoardLayout[]
+- Computation logic could be offloaded to a Web Worker if needed later
 - Two material-type optimization passes share the same bin packing service (parameterized by board spec)
 
 ## Phases

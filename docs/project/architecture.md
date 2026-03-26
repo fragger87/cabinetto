@@ -16,7 +16,7 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 | **State** | ProjectStateService | Signal-based state with `externalChange` for import re-sync |
 | **Computation** | OptimizationOrchestratorService | Coordinates stages via `optimizeLegs()`, `optimizeDepth()`, `buildCabinets()`, `runCuttingPasses()`, `runHdfPass()`, `scoreTrial()` |
 | **Algorithms** | CuttingOptimizerService | Guillotine bin packing with BSSF (shared by all 3 material types) |
-| **Algorithms** | DepthOptimizerService | Heuristic depth + candidate generation at 5mm steps |
+| **Algorithms** | DepthOptimizerService | Heuristic depth (1mm scan) + candidate generation (5mm steps) |
 | **BOM** | ElementCalculatorService | Carcass parts, HDF (nailed/grooved mount), edge banding, hardware |
 | **BOM** | DrawerCalculatorService | Drawer dimensions, heights (3 schemes), 15mm pieces |
 | **BOM** | BomSummaryService | Aggregates via `build(config, result)` |

@@ -23,7 +23,7 @@ As a developer, I want automated build, test, and lint checks on push so that br
 - Workflow file: `.github/workflows/ci.yml`
 - Use `actions/setup-node` with Node.js LTS version
 - Cache `node_modules` via `actions/cache` for faster runs
-- Run headless Chrome for Karma tests (`--browsers=ChromeHeadless`) or Jest (no browser needed)
+- Vitest runs in jsdom — no browser needed for unit tests
 - Consider adding `--no-progress` to ng build/test for cleaner CI output
 
 ### orchestratorBrief

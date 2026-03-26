@@ -30,8 +30,8 @@
 | `optimization-orchestrator.service.spec.ts` | 7 | Leg/depth sweep, fixed params, drawer pass, per-cabinet height |
 | `verification.spec.ts` | 8 | Cross-validation against known formulas |
 | `drawer-calculator.service.spec.ts` | 12 | Drawer heights (equal/graduated/custom), back clearance, min height |
-| `element-calculator.service.spec.ts` | 12 | HDF calc, edge banding, grooved/nailed mount, hardware counts |
-| `depth-optimizer.service.spec.ts` | 4 | Heuristic depth, candidate generation |
+| `element-calculator.service.spec.ts` | 11 | HDF calc, edge banding, grooved/nailed mount, hardware counts |
+| `depth-optimizer.service.spec.ts` | 5 | Heuristic depth, candidate generation |
 | `persistence.service.spec.ts` | 6 | localStorage save/load, JSON import/export, validation |
 | `app.spec.ts` | 2 | App component smoke tests |
 
@@ -61,3 +61,4 @@
 
 **Update when:** New test file added, framework changed, or coverage thresholds set.
 **Verify:** `npm test && npm run e2e` passes after any code change.
+**See also:** [Documentation Hub](../docs/README.md), [Test Audit](../docs/project/test_audit.md)

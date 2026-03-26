@@ -3,7 +3,9 @@ import { DecimalPipe } from '@angular/common';
 import { BoardLayout, PlacedPiece } from '../../models';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
-const SCALE = 0.2; // 0.2px per mm
+// Scale chosen so a 2800×2070mm board renders at 560×414px — large enough
+// to read piece labels but fits within a 1024px viewport with margins
+const SCALE = 0.2; // px per mm
 
 @Component({
   selector: 'app-cutting-layout',

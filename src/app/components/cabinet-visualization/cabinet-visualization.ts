@@ -1,7 +1,9 @@
 import { Component, input } from '@angular/core';
 import { Cabinet } from '../../models';
 
-const VIZ_SCALE = 0.15; // px per mm for cabinet blocks
+// Smaller than cutting-layout scale (0.2) because the overview shows all
+// cabinets side-by-side — a 2800mm board at 0.15 = 420px, fits in viewport
+const VIZ_SCALE = 0.15; // px per mm
 
 @Component({
   selector: 'app-cabinet-visualization',

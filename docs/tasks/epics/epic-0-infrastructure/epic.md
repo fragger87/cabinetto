@@ -16,7 +16,7 @@ Establish Angular project foundation, build pipeline, testing framework, and per
 
 - Angular project scaffold (latest LTS) with TypeScript strict mode
 - ESLint + Prettier configuration
-- Unit test framework setup (Jest or Karma/Jasmine)
+- Unit test framework setup (Vitest)
 - CI/CD pipeline via GitHub Actions (build + test + lint on push)
 - Project persistence layer: localStorage adapter + JSON file download/upload
 - Project directory structure conventions (services, models, components)

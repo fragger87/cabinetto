@@ -57,7 +57,7 @@ Calculate the complete bill of materials for all material types — carcass part
 
 ## Architecture Impact
 
-- ElementCalculatorService: pure TypeScript, no UI dependencies
+- ElementCalculatorService: pure computation logic in Angular service
 - DrawerCalculatorService: dedicated service for drawer dimension derivation
 - Output interfaces (CutPiece[], BomSummary) shared with Epic 2 (cutting) and Epic 4 (report)
 

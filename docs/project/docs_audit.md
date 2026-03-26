@@ -34,26 +34,13 @@
 | `e1dda02` | Angular deps language in satellite docs, Vitest refs, codebase audit cleanup, scoreTrial, drawerSameAsCarcass |
 | `980ea86` | SVG component comments, codebase audit stale claims |
 
-## Remaining Findings (non-blocking)
+## Remaining Findings (baseline)
 
-### MEDIUM (5)
+### LOW (1)
 
-| # | Finding | Location |
-|---|---------|----------|
-| 1 | Jest/Karma refs in Epic 0 epic.md, US004, US016 | Story/epic files |
-| 2 | tests/README.md per-file count errors (depth-optimizer 4→5, element-calc 12→11) | `tests/README.md` |
-| 3 | "Framework-agnostic" phrasing ambiguous in Epic 2/3 | Epic files |
-| 4 | Depth optimizer step ambiguity (1mm heuristic vs 5mm candidate) | `architecture.md` |
-| 5 | docs_audit.md references already-resolved findings | Self-referential |
-
-### LOW (4)
-
-| # | Finding | Location |
-|---|---------|----------|
-| 6 | 3 empty reference subdirectories | Intentional placeholders |
-| 7 | No back-link from tests/README.md to docs hub | `tests/README.md` |
-| 8 | 21/23 component files lack comments | Component layer |
-| 9 | 3 viz-scale constants lack WHY comments | cabinet-visualization, cutting-layout |
+| # | Finding | Location | Notes |
+|---|---------|----------|-------|
+| 1 | 3 empty reference subdirectories | `docs/reference/guides/`, `manuals/`, `research/` | Intentional placeholders for future content |
 
 ## Maintenance
 

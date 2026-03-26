@@ -28,7 +28,7 @@ As a developer, I want to confirm the TypeScript optimizer produces identical re
 ### orchestratorBrief
 
 ```
-tech: TypeScript, Jest/Jasmine, Python (reference only)
+tech: TypeScript, Vitest, Python (reference only)
 keyFiles: src/app/services/*.spec.ts, old/kalkulator_z_pliku.py, test-fixtures/
 approach: Generate fixtures from Python, write comparison tests in TypeScript
 complexity: Medium (cross-language verification, fixture generation)
