@@ -1,0 +1,44 @@
+{
+  "name": "600mm base cabinet, no drawers, nailed back",
+  "materials": [
+    { "name": "PB 18mm", "width": 2800, "height": 2070, "thickness": 18, "edgeBanding": "PCV_1" },
+    { "name": "PB 15mm", "width": 2800, "height": 2070, "thickness": 15, "edgeBanding": "PCV_2" },
+    { "name": "HDF 3mm", "width": 2800, "height": 2070, "thickness": 3, "edgeBanding": "" }
+  ],
+  "config": {
+    "cabinetType": "base",
+    "totalHeight": 890,
+    "legs": 150,
+    "depth": 514,
+    "railWidth": 80,
+    "kerf": 4,
+    "carcassMaterialIndex": 0,
+    "drawerMaterialIndex": 1,
+    "hdfMaterialIndex": 2,
+    "slideClearance": 13,
+    "frontGap": 30,
+    "drawerGap": 3,
+    "backPanelMount": "nailed",
+    "backPanelOverlap": 8,
+    "drawerBottomMount": "nailed",
+    "drawerBottomOverlap": 8
+  },
+  "cabinet": {
+    "name": "C60",
+    "width": 600,
+    "quantity": 1
+  },
+  "expected": {
+    "pieces": [
+      { "name": "Side", "width": 740, "height": 514, "quantity": 2, "materialIndex": 0 },
+      { "name": "Bottom", "width": 564, "height": 514, "quantity": 1, "materialIndex": 0 },
+      { "name": "Rail", "width": 564, "height": 80, "quantity": 2, "materialIndex": 0 },
+      { "name": "Back panel", "width": 564, "height": 722, "quantity": 1, "materialIndex": 2 }
+    ],
+    "edgeBanding": {
+      "lengthMm": 2249,
+      "materialIndex": 0
+    },
+    "hardware": { "legSets": 1, "slidePairs": 0 }
+  }
+}
