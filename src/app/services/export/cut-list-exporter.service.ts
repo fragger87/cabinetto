@@ -44,7 +44,8 @@ export class CutListExporterService {
   }
 
   private buildExportPieces(pieces: CutPiece[], config: ProjectConfig): ExportPiece[] {
-    // Map each materialType code to the actual material from config
+    // Build lookup by thickness code so pieces can resolve their material
+    // name and banding symbol regardless of index ordering in config
     const carcassMat = config.materials[config.carcassMaterialIndex];
     const drawerIdx =
       config.drawerMaterialIndex === config.carcassMaterialIndex

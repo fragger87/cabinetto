@@ -7,6 +7,9 @@ import { SvgCabinetMini } from '../svg-cabinet-mini/svg-cabinet-mini';
 import { InfoButton } from '../info-button/info-button';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
+const MINI_SVG_USABLE_HEIGHT = 74;
+const MINI_SVG_TOP_OFFSET = 12;
+
 type CabinetInput = Omit<Cabinet, 'bodyHeight' | 'legHeight'>;
 
 @Component({
@@ -45,9 +48,9 @@ export class CabinetList {
   protected drawerLinePositions(cab: CabinetInput): number[] {
     if (!cab.drawers || cab.drawers.count <= 1) return [];
     const lines: number[] = [];
-    const step = 74 / cab.drawers.count; // 74px = usable area in mini SVG
+    const step = MINI_SVG_USABLE_HEIGHT / cab.drawers.count;
     for (let i = 1; i < cab.drawers.count; i++) {
-      lines.push(12 + i * step); // 12px = top offset in mini SVG
+      lines.push(MINI_SVG_TOP_OFFSET + i * step);
     }
     return lines;
   }

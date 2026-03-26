@@ -77,8 +77,10 @@ export class ElementCalculatorService {
 
     for (const cab of cabinets) {
       const innerW = cab.width - 2 * boardThickness;
-      // nailed: backH = bodyHeight - thickness (top rail only)
-      // grooved: backH = bodyHeight - 2×thickness + 2×overlap (between both rails, into grooves)
+      // Nailed panel sits behind carcass, spanning from below the top rail
+      // to the bottom edge (no bottom rail blocks it) → subtract one thickness.
+      // Grooved panel slides into dadoes in both rails → subtract two thicknesses
+      // but extend into both grooves by the overlap amount.
       const backW = backPanelMount === 'nailed' ? innerW : innerW + 2 * backPanelOverlap;
       const backHFinal =
         backPanelMount === 'nailed'
@@ -134,7 +136,8 @@ export class ElementCalculatorService {
       const innerW = cab.width - 2 * boardThickness;
       const qty = cab.quantity;
 
-      // Side front edges + bottom front edge
+      // Band all exposed front-facing edges for moisture protection:
+      // sides (2 long edges visible) + bottom (front edge only, sides glued to panels)
       let cabMm = cab.bodyHeight * 2 * qty + innerW * qty;
 
       // Drawer front panel edges (top edge + 2 side edges per drawer front)

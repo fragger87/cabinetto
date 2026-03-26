@@ -21,12 +21,6 @@ Hub for architecture decision records, guides, manuals, and research.
 |-----|-------|--------|------|
 | [ADR-001](adrs/adr-001-frontend-framework.md) | Frontend Framework Selection | Accepted | 2026-03-24 |
 
-### Guide Registry
-
-| Guide | Topic |
-|-------|-------|
-| (none yet) | |
-
 ## When to Create Documents
 
 | Type | Trigger |
