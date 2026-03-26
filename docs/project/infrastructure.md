@@ -14,7 +14,7 @@
 |------|---------|--------|
 | Install | `npm ci` | node_modules/ |
 | Build | `ng build --configuration=production` | dist/cabinet-calculator/ (~310 KB) |
-| Test | `ng test` | Vitest results (57 unit tests) |
+| Test | `ng test` | Vitest results (69 unit tests) |
 | Coverage | `ng test --coverage` | V8 coverage report |
 | Lint | `ng lint` | ESLint results |
 | Format | `npm run format` | Prettier auto-fix |

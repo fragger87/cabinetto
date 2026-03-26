@@ -22,7 +22,7 @@
 
 ## Test Structure
 
-### Unit Tests (57 tests, 8 files)
+### Unit Tests (69 tests, 9 files)
 
 | File | Tests | Description |
 |------|-------|-------------|
@@ -33,6 +33,7 @@
 | `element-calculator.service.spec.ts` | 11 | HDF calc, edge banding, grooved/nailed mount, hardware counts |
 | `depth-optimizer.service.spec.ts` | 5 | Heuristic depth, candidate generation |
 | `persistence.service.spec.ts` | 6 | localStorage save/load, JSON import/export, validation |
+| `cabinet-harness.spec.ts` | 12 | Fixture-based per-cabinet BOM verification (3 fixtures x 4 tests) |
 | `app.spec.ts` | 2 | App component smoke tests |
 
 ### E2E Tests (11 tests, 1 file)
@@ -51,11 +52,24 @@
 | Drawer | Height formulas + clearances | Equal/graduated/custom, back clearance, HDF bottom |
 | Persistence | Round-trip fidelity | Save/load/export/import JSON |
 | Verification | Cross-check with known values | Board counts, utilization, edge cases |
+| Fixture Harness | Per-cabinet BOM from JSON fixtures | Pieces, materials, edge banding, hardware |
 | E2E | Full user workflows | Add cabinets → calculate → report → print |
+
+## Cabinet Test Harness
+
+JSON fixture files in `src/app/services/fixtures/` define per-cabinet scenarios with hand-calculated expected values. The harness (`cabinet-harness.spec.ts`) auto-discovers all fixtures and verifies pieces, material assignment, edge banding, and hardware.
+
+**Adding a new test:** Create a JSON file in `src/app/services/fixtures/` — no code changes needed. See existing fixtures for the format.
+
+| Fixture | Scenario |
+|---------|----------|
+| `plain-base-600.json` | 600mm base, no drawers, nailed back |
+| `drawer-base-600-equal.json` | 600mm base, 3 equal drawers |
+| `grooved-base-600.json` | 600mm base, grooved back panel |
 
 ## Current Coverage
 
-57 unit tests + 11 E2E tests = 68 total, all passing.
+69 unit tests + 11 E2E tests = 80 total, all passing.
 
 ## Maintenance
 

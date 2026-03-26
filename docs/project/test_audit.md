@@ -8,11 +8,11 @@
 
 | Metric | Value |
 |--------|-------|
-| Unit test files | 8 |
-| Unit tests | 57 |
+| Unit test files | 9 |
+| Unit tests | 69 |
 | E2E test files | 1 |
 | E2E tests | 11 |
-| **Total tests** | **68** |
+| **Total tests** | **80** |
 | Services with tests | 6 / 9 (67%) |
 | Components with tests | 0 / 22 (0%) |
 
