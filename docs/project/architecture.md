@@ -14,7 +14,7 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 |-------|-----------|----------------|
 | **Input** | MaterialLibrary, MaterialAssignment, GlobalSettingsForm, CabinetList, DrawerConfigForm, PolymorphicField | Reactive forms → ProjectStateService |
 | **State** | ProjectStateService | Signal-based state with `externalChange` for import re-sync |
-| **Computation** | OptimizationOrchestratorService | Coordinates stages via `optimizeLegs()`, `optimizeDepth()`, `runCuttingPasses()`, `runHdfPass()` |
+| **Computation** | OptimizationOrchestratorService | Coordinates stages via `optimizeLegs()`, `optimizeDepth()`, `buildCabinets()`, `runCuttingPasses()`, `runHdfPass()` |
 | **Algorithms** | CuttingOptimizerService | Guillotine bin packing with BSSF (shared by all 3 material types) |
 | **Algorithms** | DepthOptimizerService | Heuristic depth + candidate generation at 5mm steps |
 | **BOM** | ElementCalculatorService | Carcass parts, HDF (nailed/grooved mount), edge banding, hardware |
@@ -63,7 +63,7 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 | `drawerMaterialThickness` propagated from board | Eliminates mismatch between board spec and drawer formula |
 | `drawerSameAsCarcass` merges pieces into one pass | Drawer pieces packed alongside carcass pieces for better utilization |
 | HDF uses `board.height` as strip depth | HDF pieces vary in size; carcass depth would reject tall back panels |
-| Orchestrator split into 4 private methods | `run()` is 12 lines; stages are independently readable |
+| Orchestrator split into 5 private methods | `run()` delegates to `optimizeLegs`, `optimizeDepth`, `buildCabinets`, `runCuttingPasses`, `runHdfPass` |
 
 ## Algorithm: Guillotine Bin Packing
 

@@ -16,6 +16,11 @@ export class BomSummaryService {
   private readonly elements = inject(ElementCalculatorService);
   private readonly drawers = inject(DrawerCalculatorService);
 
+  /**
+   * Assembles the complete bill of materials by running all calculators
+   * against the optimization result, then grouping by material type
+   * and per-cabinet breakdown for the report view.
+   */
   build(config: ProjectConfig, result: OptimizationResult): BomSummary {
     const board = result.board;
     const { railWidth, cabinetType } = config;
@@ -44,6 +49,9 @@ export class BomSummaryService {
 
     const hdfMat = config.materials[config.hdfMaterialIndex];
     const hdfBoard = materialToBoardSpec(hdfMat, config.kerf);
+    // HDF board count estimated by total piece area rather than bin packing,
+    // because HDF pieces (back panels, drawer bottoms) vary widely in size
+    // and a simple area ratio gives a close-enough purchasing estimate
     const hdfTotalArea = this.sumPieceArea(allPiecesHdf);
     const hdfBoardArea = hdfBoard.width * hdfBoard.height;
     const hdfBoardCount = hdfBoardArea > 0 ? Math.ceil(hdfTotalArea / hdfBoardArea) : 0;

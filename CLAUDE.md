@@ -17,7 +17,7 @@ npm run format   # prettier
 | Directory | Purpose |
 |-----------|---------|
 | `src/app/models/` | TypeScript interfaces (BoardSpec, Cabinet, DrawerConfig, CutPiece, etc.) |
-| `src/app/services/` | Pure computation (optimization, BOM calculation) — no Angular deps |
+| `src/app/services/` | Computation logic in Angular services (optimization, BOM calculation) |
 | `src/app/components/` | UI: input forms, report views, SVG cutting layouts |
 | `src/app/persistence/` | localStorage + JSON file import/export |
 | `docs/` | Project documentation hub |
@@ -44,5 +44,5 @@ See [Architecture](docs/project/architecture.md) for details.
 - All dimensions in millimeters (integers)
 - English keys in JSON format (no Polish)
 - Zero runtime dependencies beyond Angular core
-- Pure TypeScript services for computation (testable without Angular)
+- Computation services use Angular DI but contain pure logic (testable with TestBed)
 - Vitest for testing, ESLint + Prettier for code quality

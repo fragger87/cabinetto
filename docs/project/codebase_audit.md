@@ -12,10 +12,10 @@ Significant improvement since first audit. All magic number duplications elimina
 
 - Zero magic numbers — all domain constants in `drawer-config.ts` (DRAWER_BACK_CLEARANCE, HDF_BOTTOM_THICKNESS)
 - Board thickness propagated from config → no mismatch possible between board spec and drawer material
-- Pure services with zero Angular dependencies (7 services testable without TestBed)
+- Computation services with pure logic wrapped in Angular DI (testable with TestBed)
 - 57 unit tests + 11 E2E tests (Playwright)
 - Signal-based state with `externalChange` pattern for import/load re-sync
-- 259 KB production bundle (67 KB gzipped) — lean for an Angular app
+- ~310 KB production bundle — lean for an Angular app
 - Print CSS properly hides all non-report content
 
 ## Category Scores
@@ -50,5 +50,5 @@ Significant improvement since first audit. All magic number duplications elimina
 | P3: Hardcoded board spec in templates | `result().board` from config | Single source of truth |
 | P4: BomSummaryService 10 params | `build(config, result)` — 2 params | Readability, maintainability |
 | Q2: No error for unplaceable pieces | `console.warn` added | Debuggability |
-| DC1: Unused router boilerplate | Removed `app.routes.ts` + router | -79 KB bundle size |
+| DC1: Unused router boilerplate | Removed `app.routes.ts` (note: `@angular/router` package still in deps) | Route file removed |
 | New: Drawer thickness mismatch risk | Propagated from board spec in orchestrator | Entire bug class eliminated |
