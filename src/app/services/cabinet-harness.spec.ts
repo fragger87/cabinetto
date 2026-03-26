@@ -134,7 +134,10 @@ for (const [, mod] of Object.entries(fixtureModules)) {
 
       for (const exp of fixture.expected.pieces) {
         const match = pieces.find(
-          (p) => p.name.includes(exp.name) && p.sourceCabinet === fixture.cabinet.name,
+          (p) =>
+            p.name.includes(exp.name) &&
+            p.sourceCabinet === fixture.cabinet.name &&
+            lookup[p.materialType] === exp.materialIndex,
         );
         expect(match, `Expected piece "${exp.name}" not found`).toBeDefined();
         if (!match) continue;
