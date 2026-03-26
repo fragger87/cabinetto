@@ -11,27 +11,27 @@
 
 ## Epic Story Counters
 
-| Epic | Status | Next Story | Stories | Epic Index |
-|------|--------|------------|---------|------------|
-| Epic 0: Infrastructure & Project Setup | Backlog | US006 | US001-US005 | EP0_01 |
-| Epic 1: Project Input & Configuration | Backlog | US032 | US006-US011, US029-US031 | EP1_01 |
-| Epic 2: Optimization Engine | Backlog | US017 | US012-US016 | EP2_01 |
-| Epic 3: BOM & Materials Calculator | Backlog | US021 | US017-US020 | EP3_01 |
-| Epic 4: Report & Visualization | Backlog | US029 | US021-US028 | EP4_01 |
+| Epic | Status | Stories | Epic Index |
+|------|--------|---------|------------|
+| Epic 0: Infrastructure & Project Setup | Done | US001-US005 (5) | EP0_01 |
+| Epic 1: Project Input & Configuration | Done | US006-US011 (6) | EP1_01 |
+| Epic 2: Optimization Engine | Done | US012-US016 (5) | EP2_01 |
+| Epic 3: BOM & Materials Calculator | Done | US017-US020 (4) | EP3_01 |
+| Epic 4: Report & Visualization | Done | US021-US028 (8) | EP4_01 |
 
 ## Epics Overview
 
 ### Active
 
-- [Epic 0: Infrastructure & Project Setup](epics/epic-0-infrastructure/epic.md) - Backlog
-- [Epic 1: Project Input & Configuration](epics/epic-1-project-input/epic.md) - Backlog
-- [Epic 2: Optimization Engine](epics/epic-2-optimization-engine/epic.md) - Backlog
-- [Epic 3: BOM & Materials Calculator](epics/epic-3-bom-calculator/epic.md) - Backlog
-- [Epic 4: Report & Visualization](epics/epic-4-report-visualization/epic.md) - Backlog
+(none)
 
 ### Completed
 
-(none)
+- [Epic 0: Infrastructure & Project Setup](epics/epic-0-infrastructure/epic.md) - Done
+- [Epic 1: Project Input & Configuration](epics/epic-1-project-input/epic.md) - Done
+- [Epic 2: Optimization Engine](epics/epic-2-optimization-engine/epic.md) - Done
+- [Epic 3: BOM & Materials Calculator](epics/epic-3-bom-calculator/epic.md) - Done
+- [Epic 4: Report & Visualization](epics/epic-4-report-visualization/epic.md) - Done
 
 ## Maintenance
 

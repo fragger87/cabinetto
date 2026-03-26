@@ -13,7 +13,10 @@ import { ElementCalculatorService } from './element-calculator.service';
 import { DepthOptimizerService } from './depth-optimizer.service';
 import { DrawerCalculatorService } from './drawer-calculator.service';
 
+// 5mm step balances resolution vs speed: finer steps yield diminishing returns
+// because board kerf (typically 4mm) already limits meaningful granularity
 const STEP = 5;
+// Cabinets shorter than 200mm body are structurally unsound and waste board material
 const MIN_BODY_HEIGHT = 200;
 
 export interface TrialResult {
@@ -46,6 +49,12 @@ export class OptimizationOrchestratorService {
   private readonly depthOpt = inject(DepthOptimizerService);
   private readonly drawerCalc = inject(DrawerCalculatorService);
 
+  /**
+   * Two-stage brute-force sweep: first find optimal leg height (using a
+   * heuristic seed depth), then sweep depth at the winning leg height.
+   * Separating the stages avoids an O(N^2) combined search while still
+   * finding a near-optimal (leg, depth) pair in practice.
+   */
   run(config: ProjectConfig): OptimizationResult {
     const carcassMat = config.materials[config.carcassMaterialIndex];
     const drawerMat =
@@ -102,6 +111,9 @@ export class OptimizationOrchestratorService {
     const depthMax = isRange(config.depth) ? config.depth.max : (config.depth as number);
     const depthFixed = !isRange(config.depth);
 
+    // Use heuristic depth as seed so the leg sweep doesn't depend on an
+    // arbitrary depth — the heuristic picks the depth that maximizes strip
+    // count, giving a representative board utilization for leg comparison
     const seedDepth = depthFixed
       ? depthMin
       : this.depthOpt.heuristicDepth(depthMin, depthMax, board.height, board.kerf);
@@ -122,6 +134,8 @@ export class OptimizationOrchestratorService {
       const layouts = this.cutter.optimize(pieces, board, seedDepth);
       const trial = this.scoreTrial(leg, seedDepth, layouts, board);
       legTrials.push(trial);
+      // Primary: fewer boards = fewer sheets to buy
+      // Tiebreaker: higher utilization = less offcut waste
       if (
         trial.boardCount < bestBoards ||
         (trial.boardCount === bestBoards && trial.utilization > bestUtil)
@@ -188,6 +202,8 @@ export class OptimizationOrchestratorService {
       drawerMatType,
     );
 
+    // When drawer material matches carcass, merge into a single pass —
+    // mixed pieces pack tighter than two separate optimizations
     if (config.drawerMaterialIndex === config.carcassMaterialIndex && drawerPieces.length > 0) {
       const finalPieces = [...carcassPieces, ...drawerPieces];
       return {
@@ -198,6 +214,7 @@ export class OptimizationOrchestratorService {
       };
     }
 
+    // Different materials must be cut from separate boards
     return {
       finalPieces: carcassPieces,
       carcassLayouts: this.cutter.optimize(carcassPieces, board, depth),
@@ -223,6 +240,9 @@ export class OptimizationOrchestratorService {
       config.backPanelMount,
       config.backPanelOverlap,
     );
+    // HDF uses board.height as strip depth because HDF pieces (back panels,
+    // drawer bottoms) vary widely in size — a fixed carcass depth would
+    // reject tall back panels that exceed it
     const hdfLayouts =
       hdfPieces.length > 0 ? this.cutter.optimize(hdfPieces, hdfBoard, hdfBoard.height) : [];
     return { hdfPieces, hdfLayouts };

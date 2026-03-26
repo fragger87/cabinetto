@@ -1,6 +1,6 @@
 # Epic 3: BOM & Materials Calculator
 
-**Status:** Backlog
+**Status:** Done
 **Created:** 2026-03-20
 **Type:** Business
 

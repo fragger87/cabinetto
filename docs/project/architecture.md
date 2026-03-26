@@ -12,7 +12,7 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 
 | Layer | Components | Responsibility |
 |-------|-----------|----------------|
-| **Input** | BoardSpecForm (3 boards), GlobalSettingsForm, CabinetList, DrawerConfigForm, PolymorphicField | Reactive forms → ProjectStateService |
+| **Input** | MaterialLibrary, MaterialAssignment, GlobalSettingsForm, CabinetList, DrawerConfigForm, PolymorphicField | Reactive forms → ProjectStateService |
 | **State** | ProjectStateService | Signal-based state with `externalChange` for import re-sync |
 | **Computation** | OptimizationOrchestratorService | Coordinates stages via `optimizeLegs()`, `optimizeDepth()`, `runCuttingPasses()`, `runHdfPass()` |
 | **Algorithms** | CuttingOptimizerService | Guillotine bin packing with BSSF (shared by all 3 material types) |
@@ -21,8 +21,12 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 | **BOM** | DrawerCalculatorService | Drawer dimensions, heights (3 schemes), 15mm pieces |
 | **BOM** | BomSummaryService | Aggregates via `build(config, result)` |
 | **Persistence** | PersistenceService | localStorage + JSON file I/O with optional field defaults |
+| **Export** | CutListExporterService | CSV, Pro100, FastCut cut-list export |
 | **Report** | ReportPage, CuttingLayout, PartsList, CabinetVisualization | SVG rendering, tables, print CSS |
 | **Report** | CabinetFrontView, CabinetSideView, CabinetDetailPanel | Detailed drawings + click-to-inspect |
+| **UI** | ProjectToolbar, LanguageSelector, InfoButton | Toolbar actions, i18n, contextual help |
+| **SVG Helpers** | SvgBoardDiagram, SvgCabinetMini, SvgCabinetProfile | Reusable SVG building blocks |
+| **SVG Helpers** | SvgAssemblyCarcass, SvgAssemblyDrawer, AssemblyInstructions | Assembly visualization |
 
 ## Data Flow
 
@@ -37,7 +41,7 @@ User Input (forms) → ProjectConfig → Optimization → BoardLayout[] + BomSum
 
 | Interface | File | Purpose |
 |-----------|------|---------|
-| ProjectConfig | `models/project-config.ts` | Complete project: 3 board specs, mount types, cabinets, params |
+| ProjectConfig | `models/project-config.ts` | Complete project: materials array, mount types, cabinets, params |
 | HdfMountType | `models/project-config.ts` | `'nailed' \| 'grooved'` — for back panel and drawer bottom |
 | Cabinet | `models/cabinet.ts` | Single cabinet with computed bodyHeight/legHeight |
 | DrawerConfig | `models/drawer-config.ts` | Drawer params; `drawerMaterialThickness` propagated from board |

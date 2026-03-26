@@ -17,7 +17,7 @@
 | Level | Description | Count |
 |-------|-------------|-------|
 | Epic | Business domain or infrastructure area | 5 (Epic 0-4) |
-| Story | Vertical slice of user value (5-10 per Epic) | 25 total |
+| Story | Vertical slice of user value (5-10 per Epic) | 28 total |
 | Task | Implementation step within a Story | Created per-Story |
 
 ## Files
@@ -25,11 +25,11 @@
 | File | Purpose |
 |------|---------|
 | [kanban_board.md](kanban_board.md) | Epic tracker with story counters |
-| [epics/](epics/) | Epic and Story documents (5 epics, 25 stories) |
+| [epics/](epics/) | Epic and Story documents (5 epics, 28 stories) |
 
 ## Conventions
 
-- Story IDs are sequential across Epics: US001-US025
+- Story IDs are sequential across Epics: US001-US028
 - Epic 0 is reserved for infrastructure
 - Stories follow INVEST criteria (Independent, Negotiable, Valuable, Estimable, Small, Testable)
 - Each Story has acceptance criteria describing observable user behavior (not system internals)

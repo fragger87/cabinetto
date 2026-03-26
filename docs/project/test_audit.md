@@ -1,70 +1,105 @@
 # Test Suite Audit Report
 
-**Date:** 2026-03-21
-**Overall Score: 5.7 / 10**
+**Date:** 2026-03-26
+**Previous Score:** 5.7 / 10 (2026-03-21)
+**Overall Score: 6 / 10**
 
 ## Executive Summary
 
-The test suite covers the core optimization algorithm well (bin packing, orchestrator, verification) but has significant gaps in BOM calculation and drawer dimension logic — the most bug-prone areas based on recent fixes. No tests exist for `DrawerCalculatorService` or `ElementCalculatorService`, which contain the formulas most frequently adjusted during development.
+| Metric | Value |
+|--------|-------|
+| Unit test files | 8 |
+| Unit tests | 55 |
+| E2E test files | 1 |
+| E2E tests | 11 |
+| **Total tests** | **66** |
+| Services with tests | 6 / 9 (67%) |
+| Components with tests | 0 / 22 (0%) |
 
-## Severity Summary
+The project has strong test coverage for the computational core — all optimization and calculation services are tested with meaningful assertions. The verification suite cross-checks against the Python prototype for regression confidence. Three services and all 22 components lack unit tests.
 
-| Severity | Count |
-|----------|-------|
-| Critical | 2 |
-| High | 3 |
-| Medium | 2 |
-| Low | 1 |
-| **Total** | **8** |
+## Previous Gaps — Resolution Status
 
-## Compliance Score
+| Previous Gap | Status | Evidence |
+|-------------|--------|----------|
+| G1: Drawer height calculation (3 schemes) | FIXED | `drawer-calculator.service.spec.ts` — 11 tests |
+| G2: Drawer depth with clearances | FIXED | `drawer-calculator.service.spec.ts` — inner width + depth tests |
+| G3: HDF element calculation | FIXED | `element-calculator.service.spec.ts` — back panel + drawer bottom tests |
+| G4: Edge banding with drawer fronts | FIXED | `element-calculator.service.spec.ts` — plain + drawer + margin tests |
+| G5: Grooved vs nailed mount dimensions | FIXED | `element-calculator.service.spec.ts` — nailed + grooved HDF tests |
+| G6: Depth optimizer heuristic | FIXED | `depth-optimizer.service.spec.ts` — 5 tests |
+| G7: BOM summary aggregation | OPEN | No tests for BomSummaryService |
 
-| Category | Score | Notes |
-|----------|-------|-------|
-| Business Logic Focus | 8/10 | No framework tests detected — all test business logic |
-| E2E Critical Coverage | N/A | SPA — no API endpoints |
-| Risk-Based Value | 7/10 | All existing tests are high-value; no low-value tests to remove |
-| Coverage Gaps | 3/10 | 2 critical services untested (drawer calc, element calc) |
-| Isolation & Anti-Patterns | 7/10 | localStorage properly cleared; some tests share implicit state |
-| Manual Test Quality | N/A | No manual test scripts |
-| Test Structure | 5/10 | Tests only in services/ — no component tests, inconsistent co-location |
-| **Overall** | **5.7/10** | Dragged down by coverage gaps |
+## Per-File Breakdown
 
-## Existing Tests — Value Assessment
+### Unit Tests
 
-| File | Tests | Value | Verdict |
-|------|-------|-------|---------|
-| `cutting-optimizer.service.spec.ts` | 6 | HIGH (core algorithm) | KEEP all |
-| `optimization-orchestrator.service.spec.ts` | 7 | HIGH (integration, drawer pass) | KEEP all |
-| `verification.spec.ts` | 8 | HIGH (cross-validation) | KEEP all |
-| `persistence.service.spec.ts` | 6 | HIGH (data integrity) | KEEP all |
-| `app.spec.ts` | 2 | LOW (smoke test only) | KEEP — cheap insurance |
+| File | Tests | What Is Tested | Value |
+|------|-------|----------------|-------|
+| `cutting-optimizer.service.spec.ts` | 6 | Single/multi-board packing, rotation, utilization, strip count, empty input | HIGH |
+| `optimization-orchestrator.service.spec.ts` | 7 | Full optimization with trials, fixed legs/depth skip, per-cabinet override, drawer layouts | HIGH |
+| `verification.spec.ts` | 7 | Python prototype cross-validation: strips, waste, heuristic, elements, full optimization, edge cases | HIGH |
+| `element-calculator.service.spec.ts` | 11 | HDF back panel, drawer bottoms (nailed + grooved), edge banding (+10% margin), hardware counts | HIGH |
+| `drawer-calculator.service.spec.ts` | 11 | Inner width, depth clearances, min-height guard, equal/graduated/custom layouts, piece generation, quantity | HIGH |
+| `persistence.service.spec.ts` | 6 | localStorage save/load, null handling, corrupt JSON, file import, invalid file rejection | HIGH |
+| `depth-optimizer.service.spec.ts` | 5 | Heuristic within range, waste minimization, single-value range, candidate generation, strip count | HIGH |
+| `app.spec.ts` | 2 | App creation, title rendering | LOW |
 
-**Verdict: 0 tests to remove.** All 29 existing tests are justified.
+### E2E Tests
 
-## Coverage Gaps (Critical)
+| File | Tests | What Is Tested | Value |
+|------|-------|----------------|-------|
+| `e2e/app.spec.ts` | 11 | Board defaults, global settings, error handling, add cabinet, drawer layouts, SVG rendering, detail panel, JSON export/import, localStorage, cutting layouts with utilization | HIGH |
 
-| # | Severity | Missing Test | Service | Risk | Priority |
-|---|----------|-------------|---------|------|----------|
-| G1 | **CRITICAL** | Drawer height calculation (equal/graduated/custom schemes) | `drawer-calculator.service.ts` | Wrong drawer heights → pieces don't fit in cabinet | 25 |
-| G2 | **CRITICAL** | Drawer depth with back clearance | `drawer-calculator.service.ts` | Drawers collide with back panel | 22 |
-| G3 | **HIGH** | HDF element calculation (back panels + drawer bottoms) | `element-calculator.service.ts` | Wrong HDF board count → material shortage | 18 |
-| G4 | **HIGH** | Edge banding calculation with drawer fronts | `element-calculator.service.ts` | Under-ordering edge banding | 16 |
-| G5 | **HIGH** | Grooved vs under drawer bottom mount dimensions | `element-calculator.service.ts` | Wrong HDF dimensions for mount type | 18 |
-| G6 | **MEDIUM** | Depth optimizer heuristic (best strip waste) | `depth-optimizer.service.ts` | Suboptimal depth selection | 12 |
-| G7 | **MEDIUM** | BOM summary aggregation (per-cabinet breakdown) | `bom-summary.service.ts` | Incorrect totals in report | 12 |
+## Remaining Coverage Gaps
 
-## Anti-Patterns Detected
+### Services Without Tests (3 of 9)
 
-| # | Severity | Pattern | Location | Issue |
-|---|----------|---------|----------|-------|
-| A1 | LOW | **Happy Path Only** | `optimization-orchestrator.service.spec.ts` | No test for invalid input (e.g., cabinet width < 2×thickness) |
+| Service | Lines | Risk | Notes |
+|---------|-------|------|-------|
+| **BomSummaryService** | 91 | HIGH | Aggregates board count, edge banding, hardware. Incorrect totals impact material purchasing. |
+| **CutListExporterService** | 192 | MEDIUM | CSV/Pro100/FastCut export. Output consumed by CNC tools — format errors costly. |
+| **ProjectStateService** | 27 | MEDIUM | Signal-based state. Small service, partially covered by E2E. |
+
+### Components (0 of 22 with unit tests)
+
+No component .spec.ts files exist. Mitigated by E2E suite covering critical user flows.
+
+## Anti-Patterns
+
+| # | Severity | Pattern | Location |
+|---|----------|---------|----------|
+| A1 | MEDIUM | Happy path only — no error/boundary tests | `cutting-optimizer.service.spec.ts` |
+| A2 | MEDIUM | Happy path only — no invalid input tests | `optimization-orchestrator.service.spec.ts` |
+| A3 | LOW | Mixed DI strategies (`new` vs `TestBed.inject`) | Across test files |
+| A4 | LOW | No afterEach cleanup in persistence tests | `persistence.service.spec.ts` |
+
+## Scoring
+
+| Category | Score | Weight | Weighted |
+|----------|-------|--------|----------|
+| Core algorithm coverage | 8/10 | 30% | 2.4 |
+| Orchestration coverage | 7/10 | 20% | 1.4 |
+| Persistence/IO coverage | 7/10 | 15% | 1.05 |
+| Component coverage | 1/10 | 15% | 0.15 |
+| E2E coverage | 8/10 | 10% | 0.8 |
+| Error/boundary coverage | 3/10 | 10% | 0.3 |
+| **Total** | | **100%** | **6.1 → 6/10** |
 
 ## Recommended Actions (Priority Order)
 
-| # | Action | Effort | Covers |
-|---|--------|--------|--------|
-| 1 | **Add `drawer-calculator.service.spec.ts`** — test all 3 layout schemes, back clearance, min height validation | M | G1, G2 |
-| 2 | **Add `element-calculator.service.spec.ts`** — test HDF calc, edge banding, grooved vs under mount, hardware counts | M | G3, G4, G5 |
-| 3 | **Add `depth-optimizer.service.spec.ts`** — test heuristic + candidate generation | S | G6 |
-| 4 | **Add error case to orchestrator tests** — invalid cabinet dimensions | S | A1 |
+| # | Priority | Action | Effort | Impact |
+|---|----------|--------|--------|--------|
+| 1 | P0 | Add BomSummaryService tests (board counting, edge banding totals, hardware, multi-cabinet, empty input) | M | +0.5 score |
+| 2 | P0 | Add CutListExporterService tests (CSV format, delimiters, column headers, each export format) | M | +0.3 score |
+| 3 | P1 | Add boundary/error tests for CuttingOptimizer (oversized pieces, zero dimensions, kerf edge cases) | S | +0.2 score |
+| 4 | P1 | Add ProjectStateService tests (signal reactivity, state transitions) | S | +0.2 score |
+| 5 | P1 | Add error-path tests for Orchestrator (empty cabinets, invalid indices) | S | +0.1 score |
+| 6 | P2 | Add component tests for report-page, parts-list, cutting-layout, global-settings-form | L | +0.5 score |
+
+Addressing P0 + P1 items would raise the score to approximately **8/10**.
+
+## Maintenance
+
+**Update when:** Test files added or removed, coverage thresholds changed.
+**Verify:** Run `npm test` and compare test count against this report.

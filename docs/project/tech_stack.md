@@ -6,8 +6,8 @@
 |-----------|---------|---------|
 | Angular | 21.2.0 | Frontend framework (standalone components, signals) |
 | TypeScript | 5.9.2 | Language (strict mode enabled) |
-| Node.js | 24.14.0 | Build tooling runtime |
-| RxJS | 7.8.x | Reactive utilities (minimal usage — signals preferred) |
+| Node.js | 24.x (local), 22.x (CI/Docker) | Build tooling runtime |
+| RxJS | 7.8.x | Angular peer dependency (unused directly — signals preferred) |
 
 ## Build & Tooling
 
@@ -19,6 +19,9 @@
 | Prettier | 3.8.1 | Code formatting |
 | eslint-config-prettier | 10.1.8 | Prevents ESLint/Prettier conflicts |
 | @vitest/coverage-v8 | 4.1.0 | Code coverage reporting |
+| Playwright | 1.58.2 | End-to-end testing |
+| Husky | 9.1.7 | Git hooks (pre-commit) |
+| lint-staged | 16.4.0 | Run linters on staged files |
 
 ## CI/CD
 

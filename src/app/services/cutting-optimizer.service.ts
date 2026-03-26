@@ -10,10 +10,17 @@ interface FreeRect {
 
 @Injectable({ providedIn: 'root' })
 export class CuttingOptimizerService {
+  /**
+   * Guillotine bin packing with Best Short Side Fit (BSSF).
+   * Pieces are placed into horizontal strips pre-cut at `depth` intervals,
+   * then free space is split into right and bottom remainders after each placement.
+   */
   optimize(pieces: CutPiece[], board: BoardSpec, depth: number): BoardLayout[] {
     const expanded = this.expandPieces(pieces);
     if (expanded.length === 0) return [];
 
+    // Area-descending sort: large pieces first reduces fragmentation because
+    // they are hardest to place and benefit from the most free-space options
     expanded.sort((a, b) => b.width * b.height - a.width * a.height);
 
     const kerf = board.kerf;
@@ -46,7 +53,13 @@ export class CuttingOptimizerService {
     return result;
   }
 
+  /**
+   * Pre-slices the board into horizontal strips of height `depth`.
+   * This mirrors how a table saw makes rip cuts first, then cross-cuts —
+   * each strip becomes a free rectangle spanning the full board width.
+   */
   private createBoard(board: BoardSpec, depth: number, kerf: number): InternalBoard {
+    // +kerf in numerator accounts for no trailing kerf after the last strip
     const numStrips = Math.floor((board.height + kerf) / (depth + kerf));
     const freeRects: FreeRect[] = [];
     for (let i = 0; i < numStrips; i++) {
@@ -55,6 +68,11 @@ export class CuttingOptimizerService {
     return { width: board.width, height: board.height, placed: [], freeRects, usedArea: 0 };
   }
 
+  /**
+   * BSSF heuristic: for each orientation, find the free rect where the
+   * shorter leftover dimension is minimized. This avoids creating thin
+   * slivers that are too narrow for future pieces.
+   */
   private placePiece(layout: InternalBoard, piece: CutPiece, depth: number, kerf: number): boolean {
     const orientations: [number, number][] = [
       [piece.width, piece.height],
@@ -70,6 +88,7 @@ export class CuttingOptimizerService {
       const idx = this.findBestRect(layout, w, h);
       if (idx >= 0) {
         const r = layout.freeRects[idx];
+        // BSSF score: min(width gap, height gap) — lower = tighter fit
         const score = Math.min(r.w - w, r.h - h);
         if (score < bestScore) {
           bestScore = score;
@@ -97,6 +116,8 @@ export class CuttingOptimizerService {
 
     layout.freeRects.splice(bestIdx, 1);
 
+    // Guillotine split: carve right remainder (full strip height) and
+    // bottom remainder (piece width only) — kerf consumed at each cut
     const rightW = rect.w - bestW - kerf;
     const bottomH = rect.h - bestH - kerf;
 
@@ -117,6 +138,8 @@ export class CuttingOptimizerService {
       });
     }
 
+    // Prioritize full-depth strips so pieces land in intact rows first,
+    // only falling back to fragmented remainders when strips are exhausted
     layout.freeRects.sort((a, b) => {
       const aPri = a.h === depth ? 0 : 1;
       const bPri = b.h === depth ? 0 : 1;

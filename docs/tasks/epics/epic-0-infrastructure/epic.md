@@ -1,6 +1,6 @@
 # Epic 0: Infrastructure & Project Setup
 
-**Status:** Backlog
+**Status:** Done
 **Created:** 2026-03-20
 **Type:** Infrastructure
 

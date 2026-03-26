@@ -1,6 +1,6 @@
 # Epic 1: Project Input & Configuration
 
-**Status:** Backlog
+**Status:** Done
 **Created:** 2026-03-20
 **Type:** Business
 
@@ -8,7 +8,7 @@
 
 ## Goal
 
-Enable users to define cabinet projects through an interactive editor with full drawer support, and import/export projects via JSON and CSV formats.
+Enable users to define cabinet projects through an interactive editor with full drawer support, and import/export projects via JSON format.
 
 ## Scope
 
@@ -38,7 +38,6 @@ Enable users to define cabinet projects through an interactive editor with full 
 
 - All fields from APPLICATION_SPEC.md JSON format are editable in the UI
 - JSON round-trip: export a project, import it back — produces identical ProjectConfig
-- CSV import correctly parses header section + cabinet table, including drawer columns
 - Invalid inputs (negative dimensions, min > max, drawer_count < 1) show inline error messages
 - Drawer config supports all 3 layout schemes: equal, graduated, custom
 - Polymorphic fields (legs, depth) correctly toggle between fixed integer and {min, max} object
@@ -58,7 +57,7 @@ Enable users to define cabinet projects through an interactive editor with full 
 
 - Defines the `ProjectConfig` interface — the central data model consumed by all other Epics
 - Establishes form component patterns reused across the application
-- JSON/CSV parsers become standalone services testable in isolation
+- JSON parser becomes a standalone service testable in isolation
 
 ## Phases
 
