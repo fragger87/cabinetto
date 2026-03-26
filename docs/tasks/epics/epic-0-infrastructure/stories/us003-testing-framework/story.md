@@ -13,24 +13,24 @@ As a developer, I want a working unit test framework so that I can verify optimi
 
 ## Acceptance Criteria
 
-1. Test runner configured (Jest or Karma/Jasmine); `ng test` executes successfully
+1. Test runner configured (Vitest); `ng test` executes successfully
 2. At least one sample test passes (e.g., `app.component.spec.ts`)
 3. Code coverage reporting enabled; coverage summary printed after test run
 
 ## Technical Notes
 
-- Angular CLI ships with Karma/Jasmine by default; alternatively use Jest via `@angular-builders/jest`
-- Coverage config: set threshold in angular.json (`codeCoverage: true`) or jest config
+- Angular 21 CLI uses Vitest by default via `@angular/build:unit-test`
+- Coverage config: `ng test --coverage` produces V8 coverage report
 - Ensure test files follow `*.spec.ts` convention
 - Sample test should verify AppComponent creates successfully
 
 ### orchestratorBrief
 
 ```
-tech: Jest or Karma/Jasmine, Angular testing utilities
-keyFiles: karma.conf.js or jest.config.ts, angular.json, src/app/app.component.spec.ts
+tech: Vitest, @angular/build:unit-test, V8 coverage
+keyFiles: angular.json, src/app/app.spec.ts
 approach: Verify default test setup works, enable coverage, run sample test
-complexity: Low (default Angular test setup)
+complexity: Low (default Angular 21 test setup)
 ```
 
 ## Test Strategy

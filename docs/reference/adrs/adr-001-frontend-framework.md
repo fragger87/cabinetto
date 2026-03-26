@@ -39,7 +39,7 @@ Angular 21 (latest LTS) with TypeScript.
 - Project uses Angular CLI for scaffolding, testing, and building
 - Components are standalone (no NgModules)
 - Reactive forms handle all user input including polymorphic fields
-- Pure TypeScript services (no Angular DI needed) for computation — testable with Vitest directly
+- Computation services use Angular DI but contain pure logic — testable with Vitest via TestBed
 - i18n handled via custom service (not Angular i18n package) for simplicity
 
 ## Maintenance

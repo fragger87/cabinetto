@@ -41,14 +41,3 @@ Significant improvement since first audit. All magic number duplications elimina
 | Q2 | LOW | One `eslint-disable` comment for accessibility | `cabinet-detail-panel.html:8` | Advisory — legitimate use (stopPropagation on dialog inner div) |
 | Q3 | LOW | One `console.warn` for unplaceable pieces | `cutting-optimizer.service.ts:29` | Intentional error handling |
 
-## Fixed Since Previous Audit
-
-| Finding | Fix | Impact |
-|---------|-----|--------|
-| P1: Magic `backClearance=20` duplicated | `DRAWER_BACK_CLEARANCE` constant | DRY violation eliminated |
-| P2: Magic `hdfThickness=3` in 3 files | `HDF_BOTTOM_THICKNESS` constant | DRY violation eliminated |
-| P3: Hardcoded board spec in templates | `result().board` from config | Single source of truth |
-| P4: BomSummaryService 10 params | `build(config, result)` — 2 params | Readability, maintainability |
-| Q2: No error for unplaceable pieces | `console.warn` added | Debuggability |
-| DC1: Unused router boilerplate | Removed `app.routes.ts` (note: `@angular/router` package still in deps) | Route file removed |
-| New: Drawer thickness mismatch risk | Propagated from board spec in orchestrator | Entire bug class eliminated |

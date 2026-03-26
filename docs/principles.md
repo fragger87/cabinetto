@@ -9,7 +9,7 @@ Core principles guiding implementation decisions in this project.
 | 1 | **KISS** | Keep solutions simple; minimum complexity for the task | Greedy BSSF heuristic over genetic algorithm |
 | 2 | **YAGNI** | Don't build features until needed | No backend API until multi-user is required |
 | 3 | **DRY** | Single source of truth for logic | One `CuttingOptimizerService` for both 18mm and 15mm |
-| 4 | **Pure Services** | Computation code has zero Angular dependencies | Services testable without TestBed |
+| 4 | **Pure Logic** | Computation logic is framework-agnostic inside Angular services | Algorithms testable with simple inputs/outputs |
 | 5 | **Integer Arithmetic** | All dimensions in mm as integers | Avoids floating-point precision issues |
 | 6 | **Vertical Slicing** | Each Story delivers end-to-end user value | No "create database schema" stories |
 | 7 | **Progressive Disclosure** | Show advanced options only when relevant | Drawer config hidden until enabled |
