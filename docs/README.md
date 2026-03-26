@@ -14,7 +14,7 @@ Central navigation for all project documentation.
 | [Design Guidelines](project/design_guidelines.md) | UI/UX conventions and color scheme |
 | [Codebase Audit](project/codebase_audit.md) | Audit report — score 9.1/10 |
 | [Test Audit](project/test_audit.md) | Test suite audit — score 6/10 |
-| [Documentation Audit](project/docs_audit.md) | Documentation quality audit — score 7.3/10 |
+| [Documentation Audit](project/docs_audit.md) | Documentation quality audit — score 8.7/10 |
 
 ## Reference Documentation
 
