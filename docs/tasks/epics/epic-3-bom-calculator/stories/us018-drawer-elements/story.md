@@ -1,6 +1,6 @@
 # US018: Calculate Drawer Box Elements (15mm)
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 3 — BOM & Materials Calculator
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

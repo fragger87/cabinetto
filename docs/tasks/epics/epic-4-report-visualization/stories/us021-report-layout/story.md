@@ -1,6 +1,6 @@
 # US021: Build Report Layout Shell
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 4 — Report & Visualization
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

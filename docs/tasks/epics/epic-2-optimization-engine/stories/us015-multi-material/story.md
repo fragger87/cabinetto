@@ -1,6 +1,6 @@
 # US015: Orchestrate Multi-Material Optimization
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 2 — Optimization Engine
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

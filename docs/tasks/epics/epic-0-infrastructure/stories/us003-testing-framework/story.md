@@ -1,6 +1,6 @@
 # US003: Set Up Testing Framework
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 0 — Infrastructure & Project Setup
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

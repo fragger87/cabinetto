@@ -9,10 +9,10 @@
 | Metric | Value |
 |--------|-------|
 | Unit test files | 8 |
-| Unit tests | 55 |
+| Unit tests | 57 |
 | E2E test files | 1 |
 | E2E tests | 11 |
-| **Total tests** | **66** |
+| **Total tests** | **68** |
 | Services with tests | 6 / 9 (67%) |
 | Components with tests | 0 / 22 (0%) |
 
@@ -38,9 +38,9 @@ The project has strong test coverage for the computational core — all optimiza
 |------|-------|----------------|-------|
 | `cutting-optimizer.service.spec.ts` | 6 | Single/multi-board packing, rotation, utilization, strip count, empty input | HIGH |
 | `optimization-orchestrator.service.spec.ts` | 7 | Full optimization with trials, fixed legs/depth skip, per-cabinet override, drawer layouts | HIGH |
-| `verification.spec.ts` | 7 | Python prototype cross-validation: strips, waste, heuristic, elements, full optimization, edge cases | HIGH |
+| `verification.spec.ts` | 8 | Python prototype cross-validation: strips, waste, heuristic, elements, full optimization, edge cases | HIGH |
 | `element-calculator.service.spec.ts` | 11 | HDF back panel, drawer bottoms (nailed + grooved), edge banding (+10% margin), hardware counts | HIGH |
-| `drawer-calculator.service.spec.ts` | 11 | Inner width, depth clearances, min-height guard, equal/graduated/custom layouts, piece generation, quantity | HIGH |
+| `drawer-calculator.service.spec.ts` | 12 | Inner width, depth clearances, min-height guard, equal/graduated/custom layouts, piece generation, quantity | HIGH |
 | `persistence.service.spec.ts` | 6 | localStorage save/load, null handling, corrupt JSON, file import, invalid file rejection | HIGH |
 | `depth-optimizer.service.spec.ts` | 5 | Heuristic within range, waste minimization, single-value range, candidate generation, strip count | HIGH |
 | `app.spec.ts` | 2 | App creation, title rendering | LOW |
@@ -84,7 +84,7 @@ No component .spec.ts files exist. Mitigated by E2E suite covering critical user
 | Component coverage | 1/10 | 15% | 0.15 |
 | E2E coverage | 8/10 | 10% | 0.8 |
 | Error/boundary coverage | 3/10 | 10% | 0.3 |
-| **Total** | | **100%** | **6.1 → 6/10** |
+| **Total** | | **100%** | **6/10** |
 
 ## Recommended Actions (Priority Order)
 

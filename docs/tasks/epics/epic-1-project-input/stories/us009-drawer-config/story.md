@@ -1,6 +1,6 @@
 # US009: Configure Drawers for a Cabinet
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 1 — Project Input & Configuration
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

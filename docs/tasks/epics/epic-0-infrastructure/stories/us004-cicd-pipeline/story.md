@@ -1,6 +1,6 @@
 # US004: Configure CI/CD Pipeline
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 0 — Infrastructure & Project Setup
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

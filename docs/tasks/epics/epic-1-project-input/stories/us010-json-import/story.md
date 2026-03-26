@@ -1,6 +1,6 @@
 # US010: Import Project from JSON File
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 1 — Project Input & Configuration
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

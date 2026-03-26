@@ -1,6 +1,6 @@
 # US020: Generate Hardware Summary and BOM Report Data
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 3 — BOM & Materials Calculator
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

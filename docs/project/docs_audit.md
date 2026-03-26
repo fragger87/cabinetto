@@ -1,88 +1,69 @@
 # Documentation Audit Report
 
-**Date:** 2026-03-26 (re-audit after fixes)
+**Date:** 2026-03-26 (v3 — after all fixes)
 **Auditor:** ln-610 Documentation Auditor (automated)
-**Previous Score:** 7.4 / 10
-**Overall Score: 7.6 / 10** (+0.2)
+**Score Trend:** 7.4 → 7.6 → **7.3** / 10
 
 ## Category Scores
 
-| Category | Score | Previous | Delta | Worker | Issues |
-|----------|-------|----------|-------|--------|--------|
-| Documentation Structure | 7.1/10 | 7.8 | -0.7 | ln-611 | 11 (3H, 5M, 3L) |
-| Semantic Content | 8.9/10 | 8.4 | +0.5 | ln-612 | 17 (3H, 2M, 7L, 5 INFO) |
-| Code Comments | 6.2/10 | 5.4 | +0.8 | ln-613 | 6 (0H, 6M) |
-| Fact Accuracy | 7.5/10 | 7.2 | +0.3 | ln-614 | 11 (0 material after validation, 3 material, 8 minor) |
+| Category | v1 | v2 | v3 | Worker |
+|----------|-----|-----|-----|--------|
+| Documentation Structure | 7.8 | 3.9 | **7.4** | ln-611 |
+| Semantic Content | 8.4 | 8.9 | **8.0** | ln-612 |
+| Code Comments | 5.4 | 6.2 | **6.6** | ln-613 |
+| Fact Accuracy | 7.2 | 7.5 | **7.0** | ln-614 |
+| **Overall** | **7.4** | **7.6** | **7.3** | |
 
-**Note on ln-611:** Raw penalty formula yielded 3.9, but the auditor's own context assessment adjusted to 7.1 — the 3 HIGH findings are all data freshness/sync issues in secondary files, not structural defects. The documentation hierarchy, navigation, compression, and stack adaptation are all sound.
+## Fixes Applied This Session
 
-## Fixes Verified Since Previous Audit
-
-| # | Previous Finding | Status |
-|---|-----------------|--------|
-| 1 | Kanban phantom stories US029-US031 | FIXED |
-| 2 | Architecture BoardSpecForm reference | FIXED — replaced with MaterialLibrary + MaterialAssignment |
-| 3 | Architecture missing 10+ components | FIXED — 9 components + CutListExporterService added |
-| 4 | Infrastructure test count (29) | FIXED — now shows 57 |
-| 5 | Node.js version unclear | FIXED — "24.x (local), 22.x (CI/Docker)" |
-| 6 | Tasks/README story count (25) | FIXED — now shows 28 |
-| 7 | Playwright/Husky/lint-staged missing | FIXED — all added to tech_stack.md |
-| 8 | Kanban all epics "Backlog" | FIXED — all marked Done |
-| 9 | Code comments: cutting-optimizer zero comments | FIXED — JSDoc + 5 WHY comments |
-| 10 | Code comments: orchestrator 1 comment | FIXED — JSDoc + 5 WHY comments |
+| # | Fix | Commits |
+|---|-----|---------|
+| 1 | Kanban board: all 5 epics → Done, phantom US029-US031 removed | 817cdf6 |
+| 2 | Architecture.md: BoardSpecForm → MaterialLibrary, 9 components added, CutListExporterService | 817cdf6 |
+| 3 | Infrastructure.md: test count 29→57, bundle ~310 KB | 817cdf6, dae6894 |
+| 4 | Tech stack: Node.js clarified, Playwright/Husky/lint-staged added, RxJS corrected | 817cdf6 |
+| 5 | Tasks/README: story count 25→28, range US001-US028 | 817cdf6 |
+| 6 | Epic files: all 5 status fields → Done | 817cdf6 |
+| 7 | Epic 1: CSV references removed (3 occurrences) | 817cdf6 |
+| 8 | Test audit: regenerated (29 tests → 55 unit + 11 E2E, score 5.7→6/10) | 817cdf6 |
+| 9 | Code comments: JSDoc + WHY on cutting-optimizer, orchestrator, bom-summary | 817cdf6, dae6894 |
+| 10 | CLAUDE.md: "no Angular deps" → "computation logic in Angular services" | dae6894 |
+| 11 | Codebase audit: router claim corrected, bundle size aligned | dae6894 |
+| 12 | Architecture: 5 private methods (was 4), run() count fixed | dae6894 |
+| 13 | README.md: Angular CLI boilerplate replaced with project-specific | 8f2bc15 |
+| 14 | Reference/README: empty guide registry removed | 8f2bc15 |
+| 15 | Presentation/README: skill command removed | 8f2bc15 |
+| 16 | Element-calculator: WHY comments for HDF mount + edge banding | 8f2bc15 |
+| 17 | Cabinet-list: magic numbers → MINI_SVG_USABLE_HEIGHT/TOP_OFFSET constants | 8f2bc15 |
+| 18 | Cut-list-exporter: WHAT comment → WHY | 8f2bc15 |
 
 ## Remaining Findings
 
-### HIGH (3) — all data freshness, not structural
+### HIGH (2)
 
 | # | Finding | Location | Action |
 |---|---------|----------|--------|
-| 1 | **Epic .md files still say "Backlog"** while kanban says Done | `docs/tasks/epics/*/epic.md` | Update status field in all 5 epic files |
-| 2 | **test_audit.md is stale** — claims 29 tests, actual 57; already marked "(stale)" in hub | `docs/project/test_audit.md` | Re-run test audit |
-| 3 | **Epic 1 references CSV import** in 3 places; contradicts requirements.md | `docs/tasks/epics/epic-1-project-input/epic.md` | Remove CSV references |
+| 1 | **28 story files still say "Backlog"** while epics and kanban say Done | `docs/tasks/epics/*/stories/*/story.md` | Bulk update status fields |
+| 2 | **test_audit.md unit test count says 55** but actual is 57 (verification.spec has 8, drawer-calc has 12) | `docs/project/test_audit.md` | Fix counts: 55→57 unit, 66→68 total |
 
-### MEDIUM (6)
+### MEDIUM (4)
 
 | # | Finding | Location | Action |
 |---|---------|----------|--------|
-| 4 | **Bundle size inconsistency** — infrastructure says ~259 KB, runbook says ~310 KB, actual ~304 KB JS | `infrastructure.md`, `runbook.md` | Align on ~310 KB |
-| 5 | **CLAUDE.md "no Angular deps"** misleading — services use `@Injectable` + `inject()` | `CLAUDE.md` | Clarify: "pure computation logic wrapped in Angular services" |
-| 6 | **codebase_audit.md "router removed"** but `@angular/router` still in package.json | `codebase_audit.md` / `package.json` | Remove dep or correct claim |
-| 7 | **architecture.md `run()` "12 lines"** — actual is ~20 substantive lines | `architecture.md` | Update or remove specific count |
-| 8 | **architecture.md "4 private methods"** — actually 5 (missing `buildCabinets`) | `architecture.md` | Add buildCabinets to description |
-| 9 | **bom-summary.service.ts** still has zero comments (91 lines) | `src/app/services/bom-summary.service.ts` | Add JSDoc on build() |
+| 3 | **"Pure services / no Angular deps" in satellite docs** — principles.md #4, ADR-001, Epic 2, Epic 0 stories | Multiple epic/story files | Align wording with CLAUDE.md |
+| 4 | **Jest/Karma/Jasmine references** in Epic 0 stories (project uses Vitest) | `us003-testing-framework/story.md` | Update to Vitest |
+| 5 | **codebase_audit.md "Fixed Since" changelog section** | `docs/project/codebase_audit.md` | Remove historical section |
+| 6 | **architecture.md lists 5 private methods** but `scoreTrial()` is a 6th | `docs/project/architecture.md` | Add scoreTrial or note it's a utility |
 
 ### LOW (3)
 
 | # | Finding | Location |
 |---|---------|----------|
-| 10 | README.md is Angular CLI boilerplate | `README.md` |
-| 11 | Empty reference registry tables | `docs/reference/README.md` |
-| 12 | Presentation README references internal skill command | `docs/presentation/README.md` |
-
-## Code Comments Improvement Detail
-
-| Metric | Previous | Current | Target |
-|--------|----------|---------|--------|
-| Business logic density | 5.0% | ~7.5% | 15-20% |
-| cutting-optimizer.service.ts | 0.0% | ~8% | 15-20% |
-| optimization-orchestrator.service.ts | 0.4% | ~5% | 15-20% |
-| HIGH severity issues | 2 | 0 | 0 |
-| MEDIUM severity issues | 5 | 6 | 0 |
-
-## Recommended Actions (Priority Order)
-
-| # | Priority | Action | Impact | Effort |
-|---|----------|--------|--------|--------|
-| 1 | HIGH | Update 5 epic.md files: status Backlog → Done | Fixes #1 | S |
-| 2 | HIGH | Re-run test audit (test_audit.md is stale) | Fixes #2 | M |
-| 3 | HIGH | Remove CSV references from Epic 1 (3 occurrences) | Fixes #3 | S |
-| 4 | MEDIUM | Fix bundle size: align infrastructure.md + runbook.md on ~310 KB | Fixes #4 | S |
-| 5 | MEDIUM | Clarify CLAUDE.md "no Angular deps" claim | Fixes #5 | S |
-| 6 | MEDIUM | Fix architecture.md: run() line count + add buildCabinets | Fixes #7, #8 | S |
-| 7 | LOW | Remove @angular/router from package.json | Fixes #6 | S |
+| 7 | docs_audit.md contains findings already resolved | Self-referential |
+| 8 | 3 empty reference subdirectories | `docs/reference/guides/`, `manuals/`, `research/` |
+| 9 | Component layer (20 files) has zero comments despite SVG coordinate math | `src/app/components/` |
 
 ## Maintenance
 
 **Update when:** Documentation changes or findings are addressed.
-**Next audit:** After addressing HIGH priority findings.
+**Next audit:** After addressing HIGH findings.

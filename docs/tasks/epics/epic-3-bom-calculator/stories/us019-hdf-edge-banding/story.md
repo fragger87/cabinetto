@@ -1,6 +1,6 @@
 # US019: Calculate HDF Elements and Edge Banding
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 3 — BOM & Materials Calculator
 **Created:** 2026-03-20
 **INVEST Score:** 5/6

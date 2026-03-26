@@ -1,6 +1,6 @@
 # US005: Implement Project Persistence Layer
 
-**Status:** Backlog
+**Status:** Done
 **Epic:** Epic 0 — Infrastructure & Project Setup
 **Created:** 2026-03-20
 **INVEST Score:** 6/6
