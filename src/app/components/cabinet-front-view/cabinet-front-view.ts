@@ -1,8 +1,10 @@
 import { Component, input, output, computed } from '@angular/core';
 import { Cabinet, BoardSpec, HDF_BOTTOM_THICKNESS } from '../../models';
 
+// Scale chosen so a 600mm-wide cabinet renders at ~150px — fits two per row on 1024px screens
 const S = 0.25; // px per mm
-const MARGIN = 50; // px margin for dimension lines
+// Margin reserves space for external dimension arrows and labels
+const MARGIN = 50;
 
 interface DrawerRect {
   y: number;
@@ -37,11 +39,13 @@ export class CabinetFrontView {
     const outerW = cab.width;
     const totalH = bodyH + legH;
 
-    // Drawer rects (front view: one rail visible at top)
+    // Drawer layout: vertical space between top and bottom rails, minus gaps
+    // and HDF bottoms, divided equally among drawers
     const drawers: DrawerRect[] = [];
     if (cab.drawers && cab.drawers.count > 0) {
       const gap = cab.drawers.drawerGap;
       const hdfBottom = HDF_BOTTOM_THICKNESS;
+      // Usable = body minus 2 rails, (count+1) gaps, and count HDF bottoms
       const usable = bodyH - t - t - (cab.drawers.count + 1) * gap - cab.drawers.count * hdfBottom;
       const drawerH = Math.floor(usable / cab.drawers.count);
       let y = t + gap; // start below rail + top gap

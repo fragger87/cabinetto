@@ -1,7 +1,8 @@
 import { Component, input, computed } from '@angular/core';
 import { Cabinet, BoardSpec, DRAWER_BACK_CLEARANCE, HDF_BOTTOM_THICKNESS } from '../../models';
 
-const S = 0.25;
+// Same scale as front view so both diagrams are visually comparable
+const S = 0.25; // px per mm
 const MARGIN = 50;
 
 @Component({
@@ -28,6 +29,9 @@ export class CabinetSideView {
     const bottomDepth = d;
     const hdfThickness = HDF_BOTTOM_THICKNESS;
 
+    // Cross-section shows drawer zone inset from front (frontGap) and back
+    // (backClearance), with slide clearance narrowing the width (not visible
+    // in side view but used for depth calculation)
     const hasDrawers = !!(cab.drawers && cab.drawers.count > 0);
     const frontGap = hasDrawers ? cab.drawers!.frontGap : 0;
     const slideClearance = hasDrawers ? cab.drawers!.slideClearance : 0;

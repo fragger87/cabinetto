@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Significant improvement since first audit. All magic number duplications eliminated (shared constants), hardcoded board specs replaced with config propagation, BomSummaryService refactored from 10 params to 2, unused router removed (saving 79 KB). The only remaining issues are a transitive dependency vulnerability (dev-only) and one eslint-disable comment.
+Significant improvement since first audit. All magic number duplications eliminated (shared constants), hardcoded board specs replaced with config propagation, BomSummaryService refactored from 10 params to 2, route file removed. The only remaining issue is a transitive dependency vulnerability (dev-only).
 
 ## Strengths
 
@@ -37,7 +37,7 @@ Significant improvement since first audit. All magic number duplications elimina
 | # | Severity | Finding | Location | Status |
 |---|----------|---------|----------|--------|
 | S1 | HIGH | `undici` 7.x transitive vulnerability | via `@angular/build` | Advisory — dev-only, not shipped |
-| Q1 | LOW | `OptimizationOrchestratorService` at 234 lines | `optimization-orchestrator.service.ts` | Advisory — high cohesion module, stages are sequential |
-| Q2 | LOW | One `eslint-disable` comment for accessibility | `cabinet-detail-panel.html:8` | Advisory — legitimate use (stopPropagation on dialog inner div) |
-| Q3 | LOW | One `console.warn` for unplaceable pieces | `cutting-optimizer.service.ts:29` | Intentional error handling |
+| Q1 | LOW | `OptimizationOrchestratorService` at ~300 lines | `optimization-orchestrator.service.ts` | Advisory — high cohesion module, stages are sequential |
+| Q2 | LOW | One `console.warn` for unplaceable pieces | `cutting-optimizer.service.ts` | Intentional error handling |
+| Q3 | LOW | `@angular/router` still in package.json | `package.json` | Route file removed but dependency remains |
 
