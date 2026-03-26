@@ -22,10 +22,12 @@ Core principles guiding implementation decisions in this project.
 
 | Decision | Rationale |
 |----------|-----------|
-| No backend | Algorithms run in <500ms client-side; no persistent storage needed |
+| No backend | Algorithms O(N) per sweep, <500ms client-side; no persistent storage needed |
 | No CSV import | JSON is sufficient; CSV adds parsing complexity for minimal value |
 | Separate 15mm pass | Drawer boards are different material; separate optimization avoids mixing |
-| Vitest over Karma | Angular 21 default; faster, better DX |
+| Signals over RxJS | Angular 21 signals are synchronous, no subscription management |
+| Vitest over Karma | Angular 21 default; faster startup, better watch mode |
+| No external math libs | Standard JS Math sufficient for integer mm arithmetic |
 
 ## Maintenance
 

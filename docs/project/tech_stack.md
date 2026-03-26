@@ -28,13 +28,7 @@
 
 ## Architecture Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| No backend | Algorithms O(N) per sweep, <500ms client-side; no persistent storage needed |
-| No external math libs | Standard JS Math sufficient for integer mm arithmetic |
-| Signals over RxJS | Angular 21 signals are synchronous, no subscription management |
-| Vitest over Karma | Angular 21 default; faster startup, better watch mode |
-| SCSS | Angular default style preprocessor |
+See [Development Principles](../principles.md#architecture-decisions) for architecture decision rationale.
 
 ## Maintenance
 

@@ -1,3 +1,5 @@
+<!-- SCOPE: Test infrastructure, running tests, and test inventory -->
+
 # Test Documentation
 
 ## Framework

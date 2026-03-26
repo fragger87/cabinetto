@@ -1,3 +1,5 @@
+<!-- SCOPE: Project presentation assets and usage instructions -->
+
 # Presentation
 
 ## Files

@@ -1,6 +1,6 @@
 # Functional Requirements
 
-Derived from [APPLICATION_SPEC.md](../../APPLICATION_SPEC.md).
+Scope of the Cabinet Calculator application.
 
 ## Core Capabilities
 
@@ -44,9 +44,14 @@ Derived from [APPLICATION_SPEC.md](../../APPLICATION_SPEC.md).
 
 ## Out of Scope
 
-See [APPLICATION_SPEC.md § Potential Future Enhancements](../../APPLICATION_SPEC.md#potential-future-enhancements-out-of-scope).
+- Wall/tall/corner cabinet types
+- Grain direction constraints
+- CNC export (DXF/SVG)
+- Cost estimation
+- User accounts and multi-user collaboration
+- Backend API
 
 ## Maintenance
 
 **Update when:** New features added or scope changed.
-**Source of truth:** APPLICATION_SPEC.md for detailed specifications; this doc for summary view.
+**Verify:** Feature list matches actual implemented functionality.

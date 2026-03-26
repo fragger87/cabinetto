@@ -1,3 +1,5 @@
+<!-- SCOPE: Task tracking system workflow and rules ONLY -->
+
 # Task Management
 
 ## Workflow

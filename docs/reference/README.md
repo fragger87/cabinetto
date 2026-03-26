@@ -1,3 +1,5 @@
+<!-- SCOPE: Reference documentation hub (ADRs, Guides, Manuals) with links to subdirectories -->
+
 # Reference Documentation
 
 Hub for architecture decision records, guides, manuals, and research.
@@ -17,7 +19,7 @@ Hub for architecture decision records, guides, manuals, and research.
 
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
-| (none yet) | | | |
+| [ADR-001](adrs/adr-001-frontend-framework.md) | Frontend Framework Selection | Accepted | 2026-03-24 |
 
 ### Guide Registry
 

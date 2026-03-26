@@ -10,6 +10,7 @@ Central navigation for all project documentation.
 | [Architecture](project/architecture.md) | System design, data flow, component structure |
 | [Tech Stack](project/tech_stack.md) | Technology inventory with versions |
 | [Infrastructure](project/infrastructure.md) | Build pipeline, hosting, CI/CD |
+| [Runbook](project/runbook.md) | Development, Docker, and deployment operations |
 | [Design Guidelines](project/design_guidelines.md) | UI/UX conventions and color scheme |
 
 ## Reference Documentation
@@ -38,8 +39,8 @@ Central navigation for all project documentation.
 |----------|-------------|
 | [Test Documentation](../tests/README.md) | Test strategy and framework |
 
-## Source
+## Presentation
 
 | Document | Description |
 |----------|-------------|
-| [APPLICATION_SPEC.md](../APPLICATION_SPEC.md) | Original application specification |
+| [Presentation](presentation/README.md) | Standalone HTML project overview |

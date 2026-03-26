@@ -1,3 +1,5 @@
+<!-- SCOPE: Quick navigation to active tasks and epic progress -->
+
 # Kanban Board
 
 ## Configuration
@@ -30,3 +32,8 @@
 ### Completed
 
 (none)
+
+## Maintenance
+
+**Update when:** Epic or Story status changes, new Epics created.
+**Verify:** Story counters match actual story files in epics/ directories.
